@@ -75,3 +75,69 @@ Here's a derivation of the fact that (if false then true else false) evaluates t
 false => false 			false => false
 -------------------------------------- E-IfFalse
 if false then true else false => false
+
+
+Theorem Forall t exists v such that t => v
+
+    s(true) = 0 = s(false)
+    s(if t1 then t2 else t3) = 1 + s(t1) + s(t2) + s(t3)
+
+Proof by induction S(t)
+    IH(induction hypothesis) : forall t' where S(t') < S(t)  exists v' such that t' => v'
+
+
+    Base Case S(t) = 0 then t = true or false
+        Suppose t = true then
+            By E-true, true => true    ----------- E- True
+                                        true => true
+
+        Supposed t= false ......
+
+
+    Induction Case : S(t) = k > 0
+                By definition of s ,
+                    t = if t1 then t2 else t3
+                    and
+                    s(t) = 1 + s(t1) + s(t2) + s(t3)
+
+                    By smartness, s(t1) < s(t), s(t2) < s(t), s(t3)< s(t).
+
+                    Then by IH, exist v1,v2,v3 such that t1 => v1, t2 => v2, t3 => v3
+
+                    Case Analysis on v1: (need to be exhaustive all possible cases)
+                        -Suppose v1 = true then by E-IfTrue we have that
+                            if t1 then t2 else t3 => t2
+                        -Suppose v1 = false then by E-IfFalse we have that
+                            if t1 then t2 else t3 => t3
+
+                    QED
+
+
+
+t -> t' (from t with some computation to t')
+
+t ::= true | false | if t then t else t
+v ::= true | false
+
+Small-step operational semantic
+
+Define a relation of the form t --> t' (like reduction )
+
+if (if true then false else true) then false else true
+    --> if false then false else true
+    --> true
+
+Computation rules (0 premises):
+
+------------------- S-IfTrue
+if true then t2 else t3 --> t2
+
+------------------- S-IfFalse
+if false then t2 else t3 --> t3
+
+
+Congruence rules (1 premise):
+t1 --> t1'
+------------------- S-If
+if t1 then t2 else t3 -->
+    if t1' then t2 else t3
