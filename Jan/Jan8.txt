@@ -1,0 +1,77 @@
+
+A little language of booleans:
+
+t ::= true | false | if t then t else t
+
+here's an example program in this language:
+
+if (if true then false else true) then false else true
+
+
+*values* are the legal results of computation and are defined by the following grammar:
+
+v ::= true | false
+
+
+Big-step operational semantics:
+
+We define a new binary relation on pairs of terms and values, which we denote as t => v.  We define inference rules that specify which pairs of terms and values are in this relation.
+
+
+--------------- E-True
+true => true
+
+
+--------------- E-False
+false => false
+
+
+
+t1 => true     t2 => v2
+--------------------------- E-IfTrue
+(if t1 then t2 else t3) => v2
+
+
+t1 => false     t3 => v3
+--------------------------- E-IfFalse
+if t1 then t2 else t3 => v3
+
+
+// 1/8
+
+--------------------------- E-Num
+ n => n
+
+
+    t1 => n1  t2 => n2   n1 [[+]] n2 = n //mathematical way plus
+------------------------------- E- Plus
+    t1 + t2 => n
+
+
+    t1 => n1 t2=> n2  ( n1 [[>]] n2 )
+------------------------------- E-GreaterTrue
+    (t1 > t2) => true
+
+    t1 => n1 t2=> n2  ( n1 [[<=]] n2 )
+------------------------------- E-GreaterFalse
+    (t1 > t2) => false
+
+//
+
+
+Each rule is a shorthand for a first-order logic formula.  For example, here is E-IfTrue in first-order logic:
+
+forall t1, t2, t3, v2:
+	if (t1 => true /\ t2 => v2),
+		then (if t1 then t2 else t3) => v2
+
+
+The rules can be used to *derive* particular elements of the => relation.  This is done simply by instantiating the metavariables within a rule with specific terms/values and then recursively deriving the required premises of the rule.
+
+Here's a derivation of the fact that (if false then true else false) evaluates to false:
+
+
+-------------- E-False  -------------- E-False
+false => false 			false => false
+-------------------------------------- E-IfFalse
+if false then true else false => false
