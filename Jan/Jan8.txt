@@ -126,6 +126,7 @@ Define a relation of the form t --> t' (like reduction )
 if (if true then false else true) then false else true
     --> if false then false else true
     --> true
+// not a single derivation tree
 
 Computation rules (0 premises):
 
@@ -141,3 +142,147 @@ t1 --> t1'
 ------------------- S-If
 if t1 then t2 else t3 -->
     if t1' then t2 else t3
+
+
+falseCount(true) = 0
+falseCount(false) = 1
+falseCount(if t1 then t2 else t2) =
+    falseCount(t1) + falseCount(t2)+ falseCount(t3)
+
+Theorem: If t ---> t', then falseCount(t) >= falseCount(t')
+  //structure induction -> assume subterm subtree holds
+Proof; By structure induction on t.
+Induction hypothesis:
+    If t0 -> t0', where t0 is a sub-term of t then falseCount(t0) >= falseCount(t0')
+
+Case analysis on the form of t.
+
+Case t= true: t doesn't step. contradiction
+Case t = false: t doesn't step. Contradiction
+Case t = if t1 then t2 else t3 :
+    Case analysis on the root rule used in the derivation of t ---> t':
+        Case S-IfTrue: Then t1 = true and t' = t2.
+            By the definition of falseCount,
+                falseCount(if t1 then t2 else t3) >= falseCount(t2)
+        Case S-IfFalse: Then t1 = false and t' = t3
+            By the definition of falseCount,
+                falseCount(if t1 then t2 else t3) >= falseCount(t3)
+        Case S-If: Then t1 --> t1' and t' = if t1' then t2 else t3.
+            By IH
+                falseCount(t1) >= falseCount(t1')
+                Therefore,
+                fC(t1) + fC(t2)+ fC(t3) >= fC(t1') + fC(t2') + fC(t3')
+                fC(if t1 then t2 else t3) >= fC(if t1' then t2 else t3)
+
+or
+
+Proof; By induction on the derivation of t ----> t'
+Induction hypothesis:
+    If t0 ---> t0', where the derivation t0 ---> t0' is a subderivation of the derivation of t --> t'
+    ,then falseCount(t0) >= falseCount(t0')
+
+Case analysis on the form of t.
+
+Case t= true: t doesn't step. contradiction
+Case t = false: t doesn't step. Contradiction
+Case t = if t1 then t2 else t3 :
+    Case analysis on the root rule used in the derivation of t ---> t':
+        Case S-IfTrue: Then t = if true then t2 else t3 and t' = t2.
+            By the definition of falseCount,
+                falseCount(if t1 then t2 else t3) >= falseCount(t2)
+        Case S-IfFalse: Then t = if false then t2 else t3 and t' = t3
+            By the definition of falseCount,
+                falseCount(if t1 then t2 else t3) >= falseCount(t3)
+        Case S-If: Then t = if t1 then t2 else t3 and t1---> t1' and t' = if t1' then t2 else t3
+
+            By IH
+                falseCount(t1) >= falseCount(t1')
+                Therefore,
+                fC(t1) + fC(t2)+ fC(t3) >= fC(t1') + fC(t2') + fC(t3')
+                fC(if t1 then t2 else t3) >= fC(if t1' then t2 else t3)
+
+
+
+// list of congruence rules followed by one  computation rule
+
+    ------------- S-IFTrue
+    if t f t -> f
+----------------S-If
+if (if t f t) f t -> If f f t
+
+ // not a single derivation tree
+ // continuous separate derivation tree
+ //
+
+
+t1 -> t1'
+----------------- S- Plus1
+t1 + t2 --> t1' + t2
+
+ what if t1 is already evaluated ?
+ what about t2 ?
+
+t2 -> t2'
+---------------- S-Plus2
+v1 + t2 -> v1 + t2'
+
+ Finally, both are evaluated
+
+n1 [[+] n2 = n
+----------------- S
+n1 + n2 ---> S-PlusRed
+
+
+t1 -> t1'
+----------------- S- Gt1
+t1 > t2 --> t1' > t2
+
+
+t2 -> t2'
+---------------- S-Gt2
+v1  >  t2 -> v1 > t2'
+
+ Finally, both are evaluated
+
+n1 [[>] n2 = b
+----------------- S-GtRed
+n1 > n2 ---> b (boolean)
+
+Example :
+(1+5) + (2+3)
+
+->S-plus1 6 + (2+3)
+->S-plus2 : 6 + 5
+->S-PlusRed : 11
+//different separate derivation tree
+
+A term is a *normal form if there is not t' such that t --> t'
+We will always arrange for values to be normal forms.
+A normal form that is not a value is called *stuck expression.
+
+Example stuck expression is true + 5
+
+(true + 5) + 4
+
+if (true + 5) then 0 else 1
+
+
+The multi-step relation t ---> * t'
+
+-----------------M-Refl
+t ---> *t
+
+t ---> t'
+-----------------M-Step
+t -->* t'
+
+t ----> * t'' t'' ----> *t'
+----------------M-Trans
+t --->*t'
+// * means multi steps
+
+A term t is *eventually stuck* if there exists some t' such that
+t---> * t' and t' is stuck
+
+Example: (1+3) + true
+

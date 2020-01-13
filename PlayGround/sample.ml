@@ -1,10 +1,6 @@
 
-type my_record = {
-    mutable name : string;
-    id : int;
-};;
 
-let bill = ref {
-    name = "bill";
-    id = 35 ;
-};;
+let  my_travese l  =
+    List.iter (fun x-> (print_int x)) l
+    ;;
+
