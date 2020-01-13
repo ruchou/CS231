@@ -1,8 +1,10 @@
 
-let ratio ~a ~b = float a /. float b ;;
+type my_record = {
+    mutable name : string;
+    id : int;
+};;
 
-for i = 0 to 3
-    do
-         print_int i
-done ;;
-
+let bill = ref {
+    name = "bill";
+    id = 35 ;
+};;
