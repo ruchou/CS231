@@ -194,7 +194,6 @@ Case t = if t1 then t2 else t3 :
             By the definition of falseCount,
                 falseCount(if t1 then t2 else t3) >= falseCount(t3)
         Case S-If: Then t = if t1 then t2 else t3 and t1---> t1' and t' = if t1' then t2 else t3
-
             By IH
                 falseCount(t1) >= falseCount(t1')
                 Therefore,
@@ -286,3 +285,49 @@ t---> * t' and t' is stuck
 
 Example: (1+3) + true
 
+
+
+falseCount(n) = 0
+falseCount(t1+t2) = falseCount(t1) + falseCount(t2)
+Thm: If t --> t', then falseCount(t) >= falseCount(t')
+
+Proof:
+    By induction on the derivation of t -> t'
+                    //structure induction :  t0 is a subterm of t
+    IH: If t0 -> t0' where the derivation of t0 -> t0' is a subderivation of t-> t', then
+    falseCount(t0) >= falseCount(t0')
+
+    Case S-Plus: Then t = t1 + t2, t' = t1' + t2 , t1 -> t1'
+        By IH falseCount(t1) >= falseCount(t1')
+        So, falseCount(t) = falseCount(t1) + falseCount(t2)
+                          >= falseCount(t1') + falseCount(t2) = falseCount(t')
+
+  Just ignore true or false because they dont step
+
+
+
+falseCount(n) = 0
+falseCount(t1+t2) = falseCount(t1) + falseCount(t2)
+Thm: If d:(t -->*t'), then falseCount(t) >= falseCount(t')
+Proof.
+By induction on the d.
+IH: If d0:(t0-->*t0') : where d0 is a sub-derivation  of d. then fC(t0) >= fC(t0')
+
+IH(Structure Induction -- DOES NOT WORK)
+    IF t0 -->* t0', where t0 is as sub-term of t, then fc(t0) >= fC(t0')
+    //because d1:(t--> * t'') : t is t not a sub-term of t !!
+    //cannot work
+
+Case Analysis on the root rule in d.
+    Case M-Refl: Then t = t', so fc(t) = fc(t') >= fC(t')
+    Case M-Step: Then t --> t', then by the single-step theorem , fc(t) >= fc(t')
+    Case M-Trans: Then d1:(t--> * t'') and d2:(t'' --> t') and d1 and d2 are sub-derivations of d
+            By IH on d1, fc(t) >= fc(t'')
+            By IH on d1, fc(t'') >= fc(t')
+            The result follows by transitivity of >= .
+
+
+Thm: Forall t, exists t' such that t --> t'
+
+
+Static Type Systems (Chapter 8)

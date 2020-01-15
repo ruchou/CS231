@@ -1,0 +1,71 @@
+Static Type System (Chapter 8)
+
+v ::= true | false | n
+T ::= Bool | Int
+
+typing relation (judgment) has the form t : T
+
+---------T-True
+true : Bool
+
+---------T-False
+false : Bool
+
+--------- T-Int
+n: Int
+
+t1 : Int  t2:Int
+-----------------T-Plus
+t1 + t2 :Int
+
+
+t1 : Int t2:Int
+-----------------T-Gt
+t1 > t2 :Bool
+
+t1 :Bool
+t2 : T
+t3 : T
+--------------------------- T-IF
+if t1 then t2 else t3 : T
+
+----T-Int  ----T-Int
+3 :int 2:int
+-------------T-Gt  ------T-Int ---------T-Int
+(3>2): Bool t2      0:Int       1:Int
+----------------------------------------T-IF
+if(3>2) then 0 else 1 : Int
+
+
+
+
+T ::= True | False | Int
+
+----------------T-True
+true: True
+
+--------------T-False
+false: False
+
+t1 :True
+t2 : T
+--------------------------- T-IfTrue
+if t1 then t2 else t3 : T
+
+t1 :False
+t2 : T
+--------------------------- T-IfFalse
+if t1 then t2 else t3 : T
+
+//why not this? because we only know it in the run-time to know if it is true of false
+//if you know if it is true or false, you dont need boolean at all !!
+
+
+"type safety": well-typed programs don't go wrong.
+Well-typed programs are not eventually stuck.
+
+If t:T then t --->*t'
+    t' is a value [and t':T]
+    or
+    exists t'' such that t' --> t''
+
