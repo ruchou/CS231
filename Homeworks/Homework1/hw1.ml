@@ -74,3 +74,7 @@ let case11 = Greater ( Plus(Int 1, Int 10), Int (-1) ) in
 let case12 = Greater (Plus(Int 20, Int 15),If(True,Int 20,Int 30)) in
     assert(step case12 = Greater(Int 35, If(True,Int 20,Int 30))) ;
     assert(eval case12 = True);;
+
+(*Q2*)
+let q2 = If (Greater(Plus (Int 1,Int 2) , Int 3),Plus(Int 4,Int 5),Plus(Int 6, Int 7)) in
+    step q2;;

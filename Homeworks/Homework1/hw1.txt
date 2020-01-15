@@ -1,0 +1,18 @@
+//need to be converted to latex
+
+Q2
+a
+   1 [[+]] 2 = 3
+   ------------------ E-Plus
+    (1+2) -> 3
+   -------------------------------E-If
+   if(1+2)> 3 then 4+5 else 6+7
+   -> if 3 > 3 then 4+5 else 6+7
+
+b
+    if (1+2) > 3 then 4+5 else 6+7
+    if 3 > 3 then 4+5 else 6+7
+    if True then 4+5 else 6+7
+    4+5
+    9
+    
