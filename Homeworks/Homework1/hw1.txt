@@ -12,7 +12,6 @@ a
 b
     if (1+2) > 3 then 4+5 else 6+7
     if 3 > 3 then 4+5 else 6+7
-    if True then 4+5 else 6+7
-    4+5
+    if False then 4+5 else 6+7
+    6 + 7
     9
-    
