@@ -1,0 +1,70 @@
+
+Type Soundness: Well typed terms are not eventually stuck.
+
+Annoying with big step semantics:
+
+If t:T then t => v or t diverges.
+
+Possible with small-step semantics:
+
+If t:T and t --> * t', then t' is not suck, i.e. either t' is a value or exist t'' such that t' --> t''.
+
+We can decompose this into two simple lemmas:
+
+//Just prove these two things
+Progress: If t:T then either t is a value or exists t' such that t --> t'
+    ("Well typed terms are not stuck")
+
+Preservation: IF t:T and t --> t', then t':T
+    ("stepping preserves well-typedness")
+
+
+//t: T (well-typed)
+
+Canonical Forms(Int): If v: Int , then v is a number n.
+Canonical Forms(Bool) : If v:Bool, then v is a number n.
+
+Progress: If d:(t:T) then either t is a value or exists t' such that t --> t'
+
+Proof by induction of the derivation of t:T.
+IH: If t0:T0 then either t0 is a value or exists t0' such that t0 --> t0'
+
+Case Analysis on the root rule in d:
+Case T-True: Then t = true, which is a value
+Case T-False: Then t = false, which is value
+Case Num : Similar
+
+Case T-Plus : Then t = t1 + t2, T:Int, d1:(t1:int), d2(t2:int)
+    By IH: either t1 is a value or exists t1' such that t1 --> t1', and
+                  t2 is a value or exists t2' such that t2 --> t2'
+
+          Case exists t1' such that t1 --> t1': Then t1 + t2 --> t1' + t2 by E-Plus1.
+          Case t1 is a value v1 and exists t2' such that t2 --> t2': then v1 + t2 --> v1 + t2'
+          Case t1 and t1 are both values, By the Canonical Forms Lemma, t1 and t2 are numbers n1 and n2.
+            Therefore, t1 + t2 steps by E-PlusRed
+
+
+
+Preservation: IF d:(t:T) and d1:(t --> t'), then t':T
+
+/* My proof
+Proof by induction of the derivation of t:T
+IH: if t0:T0 and t0 --> t0', then t0':T
+    Case Analysis on t:
+        Case E-IF and t = if t1 then t2 else t3:T and t' = if t1' then t2 else t3: T by T-IF
+        BY IH, t':T
+        Case E-Plus1 and t = t1 + t2: T and t' = t1' +t2: T
+*/
+
+By induction on d:
+     Case analysis of the root rule in d:
+        Case T-Num: Then t = n and T:Int ->  values dont step
+        Case T-Plus: Then t = t1 + t2, t1:Int , t2:Int(2), T:Int
+            Case Analysis to root rule of d1:
+            Case E-Plus1: Then t' = t1' + t2 and t1 --> t1'
+                By IH, t1':Int (1) since (1) and (2)
+                    t1' + t2 : Int by T-Plus
+            Case E-Plus2: Similar
+            Case E-PLusRed: Then t1 = n and t2 = n2 .......
+
+
