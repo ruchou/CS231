@@ -1,0 +1,191 @@
+\documentclass{article}
+\topmargin = -0.5in
+\oddsidemargin = 0in
+\evensidemargin = \oddsidemargin
+\textwidth = 6.5in
+\textheight = 9in
+\usepackage{times}
+\usepackage{bcprules}
+\usepackage{amsthm}
+\usepackage{amsmath}
+
+\newcommand{\step}[2]{{\tt #1} $\longrightarrow$ {\tt #2}}
+
+\newcommand{\inferrule}[3]{\infrule[#1]{\mbox{#2}}{\mbox{#3}}}
+\newcommand{\inferax}[2]{\infrule[#1]{\mbox{}}{\mbox{#2}}}
+
+\newtheorem{example}{Example}
+
+\title{Homework 2}
+
+\author{Yan-Ru Jhou, Nurrachman Liu}
+
+\date{Jan 17th, 2020}
+
+\begin{document}
+
+    \maketitle
+
+    \begin{description}
+        \item[2]{Consider the small-step operational semantics for booleans and integers in Section1.2 of the cheatsheet.Provide a grammar for a new metavariable s that characterizes exactly the stuck expressions relative to this semantics — the set of terms that are not values but cannot step. You can introduce other metavariables as needed.}\\
+            \begin{tt}
+                    \begin{tabular}{rrl}
+                        t & ::= & b $\mid$ if t then t else t \\
+                        &$\mid$& n $\mid$ t + t $\mid$ t > t \\
+                        b & ::= & true $\mid$ false \\
+                        n & ::= & \mbox{\rm integer constant} \\
+                        v & ::= & b $\mid$ n \\
+                        s & ::= & Stuck \\
+                        nonBool & ::= & \mbox{\rm integer constant} \\
+                        nonInt & ::= & true $\mid$ false \\
+                    \end{tabular}
+            \end{tt}
+            \inferax{E-IfTrue}{\step{if true then t$_2$ else t$_3$}{t$_2$}}
+
+            \inferax{E-IfFalse}{\step{if false then t$_2$ else t$_3$}{t$_3$}}
+
+            \inferrule{E-If}{\step{t$_1$}{t$_1'$}}
+            {\step{if t$_1$ then t$_2$ else t$_3$}{if t$_1'$ then t$_2$ else t$_3$}}
+
+            \inferrule{E-IfSTuck}{\step{t$_1$}{NonBool}}
+            {\step{if t$_1$ then t$_2$ else t$_3$}{Stuck}}
+
+            \inferrule{E-Plus1}{\step{t$_1$}{t$_1'$}}
+            {\step{t$_1$ + t$_2$}{t$_1'$ + t$_2$}}
+
+            \inferrule{E-Plus1Stuck}{\step{t$_1$}{NonInt}}
+            {\step{t$_1$ + t$_2$}{Stuck}}
+
+            \inferrule{E-Plus2}{\step{t$_2$}{t$_2'$}}
+            {\step{v$_1$ + t$_2$}{v$_1$ + t$_2'$}}
+
+            \inferrule{E-Plus2Stuck}{\step{t$_2$}{NonInt}}
+            {\step{v$_1$ + t$_2$}{Stuck}}
+
+            \inferrule{E-PlusRed}{n = n$_1$ $[\![+]\!]$ n$_2$}
+            {\step{n$_1$ + n$_2$}{n}}
+
+            \inferrule{E-GT1}{\step{t$_1$}{t$_1'$}}
+            {\step{t$_1$ > t$_2$}{t$_1'$ > t$_2$}}
+            \inferrule{E-GT1}{\step{t$_1$}{NonInt}}
+            {\step{t$_1$ > t$_2$}{Stuck}}
+
+            \inferrule{E-GT2}{\step{t$_2$}{t$_2'$}}
+            {\step{v$_1$ > t$_2$}{v$_1$ > t$_2'$}}
+            \inferrule{E-GT2}{\step{t$_2$}{NonInt}}
+            {\step{v$_1$ > t$_2$}{Stuck}}
+
+            \inferrule{E-GTRed}{b = n$_1$ $[\![>]\!]$ n$_2$}
+            {\step{n$_1$ > n$_2$}{b}}
+
+        \item[3] {For every term $t$, either $t$ is a value or there exists a term $t$ such that $t$ $\rightarrow$ $t'$}\\
+                \textit{Induction hypothesis:} For every $t_0$, where $t_0$ is a subterm of t, then  either \verb|t|$_0$ is a value or there exists a term \verb|t|$_0'$  such that \verb|t|$_0$  $\rightarrow$ \verb|t|$_0'$ .
+                \begin{proof}
+                    Case analysis on form of t
+                    \begin{itemize}
+                        \item Case: $t$ = True , then $t$ is a value
+                        \item Case: $t$ = False, then $t$ is a value
+                        \item Case: $t$ = if $t_1$ then $t_2$ else $t_3$ :\\
+                                By IH, $t_1$ is either value,which are true or false, or there exists a term $t_1'$  such that $t_1$  $\rightarrow$ $t_1'$ \\
+                                $t$ = if true then $t_2$ else $t_3$ then $t'$ = $t2$ \\
+                                $t$ = if false then $t_2$ else $t_3$ then $t'$ = $t3$ \\
+                                $t$ = if $t_1$ then $t_2$ else $t_3$ then $t'$ = $t1'$ \\
+
+                    \end{itemize}
+                \end{proof}
+        \item[4] {Suppose we want to change the evaluation strategy of our language of booleans above so that the $then$ and $else$ branches of an $if$ expression are evaluated (in that order) before the guard is evaluated.Provide a new small-step operational semantics for the language that has this behavior.} \\
+            \inferax{E-IfTrue}{\step{if true then t$_2$ else t$_3$}{t$_2$}}
+            \inferax{E-IfFalse}{\step{if false then t$_2$ else t$_3$}{t$_3$}}
+            \inferrule{E-IfThen}{\step{t$_2$}{t$_2'$}}
+            {\step{if t$_1$ then t$_2$ else t$_3$}{if t$_1$ then t$_2'$ else t$_3$}}
+            \inferrule{E-IfElse}{\step{t$_3$}{t$_3'$}}
+            {\step{if t$_1$ then t$_2$ else t$_3$}{if t$_1$ then t$_2$ else t$_3'$}}
+            \inferrule{E-IfThen}{\step{t$_1$}{t$_1'$}}
+            {\step{if t$_1$ then v$_2$ else v$_3$}{if t$_1'$ then v$_2$ else v$_3$}}
+        \item[5] {Sol}\\
+            By induction on the derivation of t $\rightarrow$ t'\\
+            \textit{Induction hypothesis:} If $t_0$ $\rightarrow$ $t_0'$ and $t_0$ $\rightarrow$ $t_0''$, where $t_0$ is a sub-derivation of $t$ $\rightarrow$ $t'$, then $t_0'=t_0''$
+            \begin{proof}
+                Case analysis on the root rule in the derivation of $t \rightarrow t'$.
+            \begin{itemize}
+                \item Case: E-IFTRUE , then t = if $t_1$ then $t_2$ else $t_3$, where $t_1$ = true.\\ The last rule in the derivation of $t$ $\rightarrow$ $t''$ can be the following cases
+                    \begin{itemize}
+                        \item E-IFFALSE: $t_1$ is false: Contradiction($t_1$ = true)
+                        \item E-IF: $t_1$ $\rightarrow$ $t_1'$ : Contradiction ( True $t_1$ doesn't step )
+                        \item E-IFTRUE: The last rule immediate follows that $t' = t''$
+                    \end{itemize}
+                \item Case: $t$ = False: Similarly, the last rule in the derivation of $t \rightarrow t''$ must be the same.
+                \item Case: $t$ = if $t_1$ then $t_2$ else $t_3$, then $t_1 \rightarrow t_1'$ for some $t_1'$ \\
+                    By the same reasoning above, the last rule of $t \rightarrow t''$ can only be E-IF and $t1 \rightarrow t1'$ for some $t1''$
+                \\ By IH on $t_1$, $t_1' = t_1''$,\\  $t$ = if $t_1'$ then $t_2$ else $t_3$ = $t''$ = if $t_1''$ then $t_2$ else $t_3$
+
+            \end{itemize}
+        \end{proof}
+        \item[6] {Sol}\\
+            \begin{enumerate}
+                \item[(a)] \\
+                 if $true + 1$ then $true$ else $false$
+                \item[(b)] \\
+                if $true$ then $true>1$ else $false>1$
+            \end{enumerate}
+        \item[7] {Sol} \\
+                \begin{enumerate}
+                     \item[(a)] \\
+                     No
+                     \item[(b)] \\
+                     if $true$ then $2>1$ else $false>1$
+                \end{enumerate}
+
+
+    \end{description}
+
+%    \section{Language of Booleans and Integers}
+%
+%    \subsection{Syntax}
+%
+%    \begin{tt}
+%        \begin{tabular}{rrl}
+%            t & ::= & b $\mid$ if t then t else t \\
+%            &$\mid$& n $\mid$ t + t $\mid$ t > t \\
+%            b & ::= & true $\mid$ false \\
+%            n & ::= & \mbox{\rm integer constant} \\
+%            v & ::= & b $\mid$ n \\
+%        \end{tabular}
+%    \end{tt}
+%
+%
+%    \subsection{Small-Step Operational Semantics}
+%
+%
+%    \inferax{E-IfTrue}{\step{if true then t$_2$ else t$_3$}{t$_2$}}
+%
+%    \inferax{E-IfFalse}{\step{if false then t$_2$ else t$_3$}{t$_3$}}
+%
+%    \inferrule{E-If}{\step{t$_1$}{t$_1'$}}
+%    {\step{if t$_1$ then t$_2$ else t$_3$}{if t$_1'$ then t$_2$ else t$_3$}}
+%
+%
+%    \inferrule{E-Plus1}{\step{t$_1$}{t$_1'$}}
+%    {\step{t$_1$ + t$_2$}{t$_1'$ + t$_2$}}
+%
+%
+%    \inferrule{E-Plus2}{\step{t$_2$}{t$_2'$}}
+%    {\step{v$_1$ + t$_2$}{v$_1$ + t$_2'$}}
+%
+%
+%    \inferrule{E-PlusRed}{n = n$_1$ $[\![+]\!]$ n$_2$}
+%    {\step{n$_1$ + n$_2$}{n}}
+%
+%    \inferrule{E-GT1}{\step{t$_1$}{t$_1'$}}
+%    {\step{t$_1$ > t$_2$}{t$_1'$ > t$_2$}}
+%
+%
+%    \inferrule{E-GT2}{\step{t$_2$}{t$_2'$}}
+%    {\step{v$_1$ > t$_2$}{v$_1$ > t$_2'$}}
+%
+%
+%    \inferrule{E-GTRed}{b = n$_1$ $[\![>]\!]$ n$_2$}
+%    {\step{n$_1$ > n$_2$}{b}}
+
+
+\end{document}
