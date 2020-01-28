@@ -185,6 +185,28 @@
                 \item[(a)]{Reverse Progress}\\
                     It still holds true since we can construct a term $t$ that take steps to some $t'$
                 \item[(b)]{Reverse Preservation}\\
+                    let $d:(t':T)$\\
+                    \textit{Induction hypothesis:} If $d_0:(t_0':T_0)$ and $d_0':(t_0 \rightarrow t_0')$, where $d_0$ $\leq$ $d$, then $t_0:T_0$.\\
+                    By induction on the derivation of $t:T$
+                    \begin{proof}
+                        Case analysis on the form of $t \rightarrow t'$.
+                        \begin{itemize}
+                            \item E-IFTRUE: Contradiction since there is no rule to step
+                            \item E-IFFALSE: Similar
+                            \item E-PLUSRED: Similar
+                            \item E-GTRED: Similar
+                            \item E-IF: Then t = $t_1$ then $t_2$ else $t_3$, and t' = $t_1'$ then $t_2$ else $t_3$\\
+                                By IH, $t_1$ has the same type of $t_1'$. Then, by T-IF, $t$ and $t'$ has the same type
+                            \item E-PLUS1: Then t = $t_1$ + $t_2$, and t' = $t_1'$ + $t_2$\\
+                                By IH, $t_1$ has the same type of $t_1'$. Then, by T-PLUS, $t$ and $t'$ has the same type
+                            \item E-PLUS2: Then t = $v_1$ + $t_2$, and t' = $v_1$ + $t_2'$\\
+                                By IH, $t_2$ has the same type of $t_2'$. Then, by T-PLUS, $t$ and $t'$ has the same type
+                            \item E-GT1: Then t = $t_1$ \textless $t_2$ and t' = $t_1'$ \textless $t_2$\\
+                                By IH, $t_1$ has the same type of $t_1'$. Then, by T-GT, $t$ and $t'$ has the same type
+                            \item E-GT2: Then t = $v_1$ \textless $t_2$ and t' = $v_1$ \textless $t_2'$\\
+                                By IH, $t_2$ has the same type of $t_2'$. Then, by T-GT, $t$ and $t'$ has the same type
+                        \end{itemize}
+                    \end{proof}
 
             \end{enumerate}
 
