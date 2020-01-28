@@ -77,7 +77,7 @@
 
             \inferrule{E-GTRed}{b = n$_1$ $[\![>]\!]$ n$_2$}
             {\step{n$_1$ > n$_2$}{b}}
-        \item [3]{Sol}\\
+        \item [3]{Sol}
             \begin{enumerate}
                 \item [(a)]{New rules}
                     \inferrule{E-AND}{\step{t$_1$}{t$_1'$}}
@@ -89,18 +89,55 @@
                 \item[(b)]{New rules for types}
                     \inferrule{T-AND}{\tt t$_1$:Bool \and t$_2$:Bool}
                     {\tt t$_1$ \&\& t$_2$:Bool}
-                \item[(c)]{Proof of Progressive Theorem}
+                \item[(c)]{Proof of Progressive Theorem} \\
+                    Canonical Forms (Bool) : If $v:Bool$, then either $v=true$ or $v=false$.\\
+                    By induction on the derivation of t:T\\
+                    \textit{Induction hypothesis:} If $t_0:T_0$, where $t_0:T_0$ is a sub-derivation of $t:T$, then either $t_0$ is a value or exists $t_0'$ such that  $t_0$ $\rightarrow$ $t_0'$
+                    \begin{proof}
+                        Case analysis on the root rule in $t:T$.
+                        \begin{itemize}
+                            \item Case T-AND: Then t = $t_1$ \&\& $t_2$, where $T:Bool$, $t_1:Bool$, $t_2:Bool$. \\
+                                By IH, $t_1$ is either a value or there exists $t_1'$ such that $t_1$ $\rightarrow$ $t_1'$, and $t_2$ is either a value or there exists $t_2'$ such that $t_2$ $\rightarrow$ $t_2'$\\
+                                Case analysis on $t_1$ and $t_2$
+                                \begin{itemize}
+                                    \item Case exists $t_1'$ such that $t_1$ $\rightarrow$ $t_1'$:\\
+                                        Then $t_1$ \&\& $t_2$ $\rightarrow$ $t_1'$ \&\& $t_2$ by E-AND
+                                    \item Case $t_1$ is a value $v_1$ and exists $t_2'$ such that $t_2$ $\rightarrow$ $t_2'$\\
+                                        Since $v_1$ is a value, by the Canonical Forms lemma, $t_1$ is either true or false. Then Case Analysis on $v_1$
+                                        \begin{itemize}
+                                            \item Case true, then $v_1$ \&\& $t_2$ $\rightarrow$ $t_2$, by E-ANDTRUE
+                                            \item Case false, then $v_1$ \&\& $t_2$ $\rightarrow$ false by E-ANDFALSE
+                                        \end{itemize}
+                                \end{itemize}
+                        \end{itemize}
+                    \end{proof}
                 \item[(d)]{Proof of Preservation Theorem}
+                    By induction on the derivation of $t:T$\\
+                    \textit{Induction hypothesis:} If $t_0:T_0$ and $t_0$ $\rightarrow$ $t_0'$, where $t_0:T_0$ is a sub-derivation of $t:T$, then $t_0':T_0$
+                    \begin{proof}
+                        Case analysis on the root rule in $t:T$.
+                        \begin{itemize}
+                            \item Case T-AND: Then t = $t_1$ \&\& $t_2$, where $T:Bool$, $t_1:Bool$, $t_2:Bool$. \\
+                            Case analysis on the root rule in $t$ $\rightarrow$ $t'$
+                            \begin{itemize}
+                                \item Case E-AND: then $t'$ = $t1'$ \&\& $t_2$\\
+                                    By IH, $t1':Bool$.
+                                    We have $t_1':Bool$, $t_2:Bool$. So $t_1'$ \&\& $t_2$ :$Bool$ by T-AND
+                                \item Case E-ANDFALSE: then $t'$ = $false$. So $t':Bool$ by T-FALSE
+                                \item Case E-ANDTRUE: then $t'$ = $t_2$. Since $t_2:Bool$, $t':Bool$
+                            \end{itemize}
+                        \end{itemize}
+                    \end{proof}
             \end{enumerate}
-        \item[4]{Sol}\\
+        \item[4]{Sol}
             \begin{enumerate}
                 \item [(a)]{New Operational Semantics}
                      \inferrule{E-AndToIF}{}
                     {\step{t$_1$ \&\& t$_2$}{if t$_1$ then t$_2$ else false}}
-                \item[(b)]{}\\
-                No, 
+                \item[(b)]{}
+                    No
             \end{enumerate}
-        \item[5] {Sol} \\
+        \item[5] {Sol}
             \begin{enumerate}
                 \item[(a)]{Remove the rule E-IFFALSE} \\
                     \begin{enumerate}
@@ -143,8 +180,13 @@
                     \end{enumerate}
 
             \end{enumerate}
+        \item[6]{Sol}
+            \begin{enumerate}
+                \item[(a)]{Reverse Progress}\\
+                    It still holds true since we can construct a term $t$ that take steps to some $t'$
+                \item[(b)]{Reverse Preservation}\\
 
-
+            \end{enumerate}
 
 
 %
