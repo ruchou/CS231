@@ -77,6 +77,29 @@
 
             \inferrule{E-GTRed}{b = n$_1$ $[\![>]\!]$ n$_2$}
             {\step{n$_1$ > n$_2$}{b}}
+        \item [3]{Sol}\\
+            \begin{enumerate}
+                \item [(a)]{New rules}
+                    \inferrule{E-AND}{\step{t$_1$}{t$_1'$}}
+                    {\step{t$_1$ \&\& t$_2$}{t$_1'$ \&\& t$_2$}}
+                    \inferrule{E-ANDFalse}{v$_1$ $=$ false}
+                    {\step{v$_1$ \&\& t$_2$}{false}}
+                    \inferrule{E-ANDTrue}{v$_1$ $=$ true}
+                    {\step{v$_1$ \&\& t$_2$}{t$_2$}}
+                \item[(b)]{New rules for types}
+                    \inferrule{T-AND}{\tt t$_1$:Bool \and t$_2$:Bool}
+                    {\tt t$_1$ \&\& t$_2$:Bool}
+                \item[(c)]{Proof of Progressive Theorem}
+                \item[(d)]{Proof of Preservation Theorem}
+            \end{enumerate}
+        \item[4]{Sol}\\
+            \begin{enumerate}
+                \item [(a)]{New Operational Semantics}
+                     \inferrule{E-AndToIF}{}
+                    {\step{t$_1$ \&\& t$_2$}{if t$_1$ then t$_2$ else false}}
+                \item[(b)]{}\\
+                No, 
+            \end{enumerate}
         \item[5] {Sol} \\
             \begin{enumerate}
                 \item[(a)]{Remove the rule E-IFFALSE} \\

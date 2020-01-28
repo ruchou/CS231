@@ -1,0 +1,108 @@
+Lambda Calculus
+Alonzo Church
+
+Untyped Lambda Calculus(Ch 5)
+
+t :: x | function x -> t | t t
+x ::= variable name
+v ::= function x -> t
+
+Examples:
+
+(function x -> x) [identity function]
+(function x1 -> function x2 -> x1 x2) [apply function]
+(function x1 -> function x2 -> x1 (x1 x2)) [twice function]
+
+a variable x is "bound" in the body of (function x -> t)
+unbound variables are called "free" variables
+    example: (function x -> x') // unbounded x'
+
+a term is "closed" if it has no free variables
+
+
+-----------------------------E-AppBeta
+(function x2 -> t1) t2  --> t1[ x2 |-> t2]
+
+Example:
+(function x -> x) 34 --> x[x |-> 34] = 34
+(function x -> (function x -> x)(x+1))) 34
+    --> ((function x -> x)(x+1))[x |-> 34]
+    =  ((function x -> x)(34+1))
+
+(function x -> x x)(function x -> x x)
+    --> (x x )[x |-> function x -> x x]
+    = (function x -> x x)(function x -> x x)
+
+the program above is called Omega -- it is the simplest program in the lambda calculus whose execution never terminates
+
+
+(id (id id))(id id)
+            apply(1)
+      apply(2)         apply(3)
+(id     apply(4)     (id) (id)
+       id  id
+
+ -> 4 is first executed
+ -> 2 is the second one
+ -> 3 is the third one
+ -> 1 is the last one
+
+
+
+Substitution
+
+x [x |-> t] = t
+x'[x |-> t] = x'  (x' <> x)
+
+(function x -> t0) [x |-> t ] = (function x -> t0)
+(function x0 -> t0)[x |-> t] = (function x0 -> t0[ x |-> t ]) where x0 <> x
+(t1 t2)[x|->t] = t1[x|->t] t2[x|->t]
+
+Call-by-value semantics:
+
+Execute the leftmost function call whose argument is already a value.
+
+
+----------------------------------E-AppBeta
+(function x2 -> t1 ) v2 --> t1[x2 |- v2]
+
+
+t1 -> t1'
+---------------- E-App1
+t1 t2 -> t1' t2
+
+t2 -> t2'
+------------- E-App2
+v1 t2 -> v1 t2'
+
+e.g.
+
+------------ E-AppBeta
+(id id)-> id
+----------------------- E-App2
+(id (id id))--> (id id)
+------------------------------ E-App1
+(id (id id)) (id id) -> (id id) (id id)
+
+
+Lazy Evaluation (Call by Need)
+Execute the leftmost function.
+
+----------------------------------E-AppBeta
+(function x2 -> t1 ) t2 --> t1[x2 |- t2]  //need to be value, it could be just a term
+
+t1 -> t1'
+---------------- E-App1
+t1 t2 -> t1' t2
+
+E-App2 does not require
+
+(function x -> id) omega
+
+//Lazy Evaluation terminate more strictly
+
+    call by val    lazy evaluation
+IF t --> v, then t --> v
+
+
+https://www.cs.umd.edu/class/fall2017/cmsc330/lectures/02-lambda-calc-encodings.pdf
