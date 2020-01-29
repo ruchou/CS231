@@ -67,12 +67,12 @@
 
             \inferrule{E-GT1}{\step{t$_1$}{t$_1'$}}
             {\step{t$_1$ > t$_2$}{t$_1'$ > t$_2$}}
-            \inferrule{E-GT1}{\step{t$_1$}{NonInt}}
+            \inferrule{E-GT1Stuck}{\step{t$_1$}{NonInt}}
             {\step{t$_1$ > t$_2$}{Stuck}}
 
             \inferrule{E-GT2}{\step{t$_2$}{t$_2'$}}
             {\step{v$_1$ > t$_2$}{v$_1$ > t$_2'$}}
-            \inferrule{E-GT2}{\step{t$_2$}{NonInt}}
+            \inferrule{E-GT2Stuck}{\step{t$_2$}{NonInt}}
             {\step{v$_1$ > t$_2$}{Stuck}}
 
             \inferrule{E-GTRed}{b = n$_1$ $[\![>]\!]$ n$_2$}
@@ -232,7 +232,7 @@
                     {($t_1 + t_2$) $\Downarrow_{k}$ timeout}
                     \inferrule{B-GTTimeout}{$t_1 \Downarrow_{k_1} n_1$  \quad $t_2 \Downarrow_{k_2} n_2$  \quad  v = n$_1$ $[\![>]\!]$ n$_2$ \quad $k < k_1 + k_2$}
                     { $t_1 > t_2$ $\Downarrow_{k}$ timeout}
-                \item[(b)]{ Type Soundness Theorem}
+                \item[(c)]{ Type Soundness Theorem}
                     We can decompose this into two simple statements:
                     \begin{enumerate}
                         \item [Progress]:
