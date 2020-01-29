@@ -6,6 +6,8 @@ Untyped Lambda Calculus(Ch 5)
 t :: x | function x -> t | t t
 x ::= variable name
 v ::= function x -> t
+T ::= Function //correspond to a set of values
+
 
 Examples:
 
@@ -108,3 +110,109 @@ IF t --> v, then t --> v
 https://www.cs.umd.edu/class/fall2017/cmsc330/lectures/02-lambda-calc-encodings.pdf
 
 
+Stuck Expression
+x1 x2
+
+x
+
+(function x -> x1 x2)(function x-> x) // there exists free variable!!!
+
+Simply Typed Lambda Calculus
+
+t :: x | function x:T -> t | t t
+x ::= variable name
+v ::= function x -> t
+T ::= Unit | T -> T
+//T ::= Function //correspond to a set of values
+
+//Type environment
+//gamma a list of pair variable names and types. {(x,t),..........}
+// add variable to type environment
+
+typing relation goes from having the form t:T to having the form
+
+Gamma |- t:T
+
+
+Gamma(x):T
+---------------- T:Var
+Gamma |- x : T
+
+     //add to scope
+Gamma U {(x:T0)} |- t: T
+------------------------T:Fun
+Gamma |- (function x:T0 -> t): T0 -> T
+
+// add checking of parameter in gamma
+// then type check of the body  just check the body of the function
+
+Gamma |- t1: T2 -> T
+Gamma |- t2: T2
+---------------------T-App
+Gamma |- t1 t2 : T
+
+
+(function x -> x+1) // what data passed in without getting stuck
+(function x -> x>0) // have to know the return type
+
+The simply-typed lambda calculus......
+Omega = (function x -> x x )( function x -> x x)
+
+
+
+---------T-Var
+{X:Nat} |- x: Nat
+---------------T-GT
+{x:Nat} |- x>0 : Bool
+---------------T-Fun                ---------------
+null |- (function x:Nat -> x>0)     34:Int
+--------------------------------------------- T-App
+null |- (function x:Nat -> x>0)34:Int
+
+
+Modular Reasoning:
+- typecheck a function once
+- can call it safely many times
+
+Lemma (Type Substitution)
+    IF Gamma U {(x,T1)} |- t: T
+        and Gamma |- v :T1
+    then Gamma |- t[x->v]: T
+    //guarantee in compile time type safety
+
+gamma,p |- q
+---------
+gamma |- p->q
+
+gamma, p -> q
+gamma, p
+--------
+gamma, Q
+
+
+p -> (q->p)
+function x:p -> function y:Q -> x
+
+(P-Q) ->((Q->R)->(P->R))
+
+function f:P->Q -> function g:Q->R -> function x:P -> g(f x)
+
+null |- (function x:p -> x):p->p
+null |- (function y:P->P -> y)(function x:p ->x ): P->P
+
+Curry-Howard isomorphism
+there is an isomorphism as follows:
+
+"program t has type T"
+"t is a proof of proposition T"
+
+Example: what's a proof of (A->B->C) -> (B->A->C)?
+
+function f:(A->B->C) -> (fun b: B -> fun a: A -> f a b)
+
+
+P Q
+-----
+P ^ Q
+
+logically and 
