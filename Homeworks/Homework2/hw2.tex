@@ -30,53 +30,54 @@
         \item[2]{Consider the small-step operational semantics for booleans and integers in Section1.2 of the cheatsheet.Provide a grammar for a new metavariable s that characterizes exactly the stuck expressions relative to this semantics the set of terms that are not values but cannot step. You can introduce other metavariables as needed.}\\
             \begin{tt}
                     \begin{tabular}{rrl}
-                        t & ::= & b $\mid$ if t then t else t \\
-                        &$\mid$& n $\mid$ t + t $\mid$ t > t \\
                         b & ::= & true $\mid$ false \\
-                        n & ::= & \mbox{\rm integer constant} \\
-                        v & ::= & b $\mid$ n \\
-                        s & ::= & Stuck \\
-                        nonBool & ::= & \mbox{\rm integer constant} \\
-                        nonInt & ::= & true $\mid$ false \\
+                        Stuck & ::= & if n then t else t \\
+                        &$\mid$& b + t $\mid$ n + b $\mid$ b > t $\mid$ n > b\\
+%                        b & ::= & true $\mid$ false \\
+%                        n & ::= & \mbox{\rm integer constant} \\
+%                        v & ::= & b $\mid$ n \\
+%                        s & ::= & Stuck \\
+%                        nonBool & ::= & \mbox{\rm integer constant} \\
+%                        nonInt & ::= & true $\mid$ false \\
                     \end{tabular}
             \end{tt}
-            \inferax{E-IfTrue}{\step{if true then t$_2$ else t$_3$}{t$_2$}}
-
-            \inferax{E-IfFalse}{\step{if false then t$_2$ else t$_3$}{t$_3$}}
-
-            \inferrule{E-If}{\step{t$_1$}{t$_1'$}}
-            {\step{if t$_1$ then t$_2$ else t$_3$}{if t$_1'$ then t$_2$ else t$_3$}}
-
-            \inferrule{E-IfSTuck}{\step{t$_1$}{NonBool}}
-            {\step{if t$_1$ then t$_2$ else t$_3$}{Stuck}}
-
-            \inferrule{E-Plus1}{\step{t$_1$}{t$_1'$}}
-            {\step{t$_1$ + t$_2$}{t$_1'$ + t$_2$}}
-
-            \inferrule{E-Plus1Stuck}{\step{t$_1$}{NonInt}}
-            {\step{t$_1$ + t$_2$}{Stuck}}
-
-            \inferrule{E-Plus2}{\step{t$_2$}{t$_2'$}}
-            {\step{v$_1$ + t$_2$}{v$_1$ + t$_2'$}}
-
-            \inferrule{E-Plus2Stuck}{\step{t$_2$}{NonInt}}
-            {\step{v$_1$ + t$_2$}{Stuck}}
-
-            \inferrule{E-PlusRed}{n = n$_1$ $[\![+]\!]$ n$_2$}
-            {\step{n$_1$ + n$_2$}{n}}
-
-            \inferrule{E-GT1}{\step{t$_1$}{t$_1'$}}
-            {\step{t$_1$ > t$_2$}{t$_1'$ > t$_2$}}
-            \inferrule{E-GT1Stuck}{\step{t$_1$}{NonInt}}
-            {\step{t$_1$ > t$_2$}{Stuck}}
-
-            \inferrule{E-GT2}{\step{t$_2$}{t$_2'$}}
-            {\step{v$_1$ > t$_2$}{v$_1$ > t$_2'$}}
-            \inferrule{E-GT2Stuck}{\step{t$_2$}{NonInt}}
-            {\step{v$_1$ > t$_2$}{Stuck}}
-
-            \inferrule{E-GTRed}{b = n$_1$ $[\![>]\!]$ n$_2$}
-            {\step{n$_1$ > n$_2$}{b}}
+%            \inferax{E-IfTrue}{\step{if true then t$_2$ else t$_3$}{t$_2$}}
+%
+%            \inferax{E-IfFalse}{\step{if false then t$_2$ else t$_3$}{t$_3$}}
+%
+%            \inferrule{E-If}{\step{t$_1$}{t$_1'$}}
+%            {\step{if t$_1$ then t$_2$ else t$_3$}{if t$_1'$ then t$_2$ else t$_3$}}
+%
+%            \inferrule{E-IfSTuck}{\step{t$_1$}{NonBool}}
+%            {\step{if t$_1$ then t$_2$ else t$_3$}{Stuck}}
+%
+%            \inferrule{E-Plus1}{\step{t$_1$}{t$_1'$}}
+%            {\step{t$_1$ + t$_2$}{t$_1'$ + t$_2$}}
+%
+%            \inferrule{E-Plus1Stuck}{\step{t$_1$}{NonInt}}
+%            {\step{t$_1$ + t$_2$}{Stuck}}
+%
+%            \inferrule{E-Plus2}{\step{t$_2$}{t$_2'$}}
+%            {\step{v$_1$ + t$_2$}{v$_1$ + t$_2'$}}
+%
+%            \inferrule{E-Plus2Stuck}{\step{t$_2$}{NonInt}}
+%            {\step{v$_1$ + t$_2$}{Stuck}}
+%
+%            \inferrule{E-PlusRed}{n = n$_1$ $[\![+]\!]$ n$_2$}
+%            {\step{n$_1$ + n$_2$}{n}}
+%
+%            \inferrule{E-GT1}{\step{t$_1$}{t$_1'$}}
+%            {\step{t$_1$ > t$_2$}{t$_1'$ > t$_2$}}
+%            \inferrule{E-GT1Stuck}{\step{t$_1$}{NonInt}}
+%            {\step{t$_1$ > t$_2$}{Stuck}}
+%
+%            \inferrule{E-GT2}{\step{t$_2$}{t$_2'$}}
+%            {\step{v$_1$ > t$_2$}{v$_1$ > t$_2'$}}
+%            \inferrule{E-GT2Stuck}{\step{t$_2$}{NonInt}}
+%            {\step{v$_1$ > t$_2$}{Stuck}}
+%
+%            \inferrule{E-GTRed}{b = n$_1$ $[\![>]\!]$ n$_2$}
+%            {\step{n$_1$ > n$_2$}{b}}
         \item [3]{Sol}
             \begin{enumerate}
                 \item [(a)]{New rules}
@@ -96,7 +97,7 @@
                     \begin{proof}
                         Case analysis on the root rule in $t:T$.
                         \begin{itemize}
-                            \item Case T-AND: Then t = $t_1$ \&\& $t_2$, where $T:Bool$, $t_1:Bool$, $t_2:Bool$. \\
+                            \item Case T-AND: Then t = $t_1$ \&\& $t_2$, where $t:Bool$, $t_1:Bool$, $t_2:Bool$. \\
                                 By IH, $t_1$ is either a value or there exists $t_1'$ such that $t_1$ $\rightarrow$ $t_1'$, and $t_2$ is either a value or there exists $t_2'$ such that $t_2$ $\rightarrow$ $t_2'$\\
                                 Case analysis on $t_1$ and $t_2$
                                 \begin{itemize}
@@ -117,7 +118,7 @@
                     \begin{proof}
                         Case analysis on the root rule in $t:T$.
                         \begin{itemize}
-                            \item Case T-AND: Then t = $t_1$ \&\& $t_2$, where $T:Bool$, $t_1:Bool$, $t_2:Bool$. \\
+                            \item Case T-AND: Then t = $t_1$ \&\& $t_2$, where $t:Bool$, $t_1:Bool$, $t_2:Bool$. \\
                             Case analysis on the root rule in $t$ $\rightarrow$ $t'$
                             \begin{itemize}
                                 \item Case E-AND: then $t'$ = $t1'$ \&\& $t_2$\\
@@ -146,7 +147,7 @@
                     \end{enumerate}
                 \item[(b)]{Add the following axiom to the type system: $\frac{}{0:Bool}$}\\
                     \begin{enumerate}
-                        \item Progress: Consider the example: \verb|if 0 then 231 else 232 |\\It would violate Progress since it would violate teh Canonical forms lemma which states that if a value of type Bool is either true of false. It would cause stuck in E-IFTrue or E-IFFalse.
+                        \item Progress: Consider the example: \verb|if 0 then 231 else 232 |\\It would violate Progress since it would violate the Canonical forms lemma which states that if a value of type Bool is either true of false. It would cause stuck in E-IFTrue or E-IFFalse.
                         \item Preserve: It is still valid because the term 0  would not take a step of evaluation.
                     \end{enumerate}
                 \item[(c)]{ Add the following axiom to the operational semantics:}\\
@@ -174,7 +175,7 @@
                     {\tt if t$_1$ then t$_2$ else t$_3$:T}
 
                 \begin{enumerate}
-                        \item Progress: Consider the example: \verb|if 20 then true else false |\\ Then, t1 = 1 has type of Int.
+                        \item Progress: Consider the example: \verb|if 20 then true else false |\\ Then, $t_1 = 20 $ has type of Int.
                         It, however, does not step.
                         \item Preserve: It is still valid since for the first inference rule in this example does not take a step
                     \end{enumerate}
@@ -183,7 +184,7 @@
         \item[6]{Sol}
             \begin{enumerate}
                 \item[(a)]{Reverse Progress}\\
-                    It still holds true since we can construct a term $t$ that take steps to some $t'$
+                    It still holds true since we can always construct a term $t$ that take steps to some $t'$
                 \item[(b)]{Reverse Preservation}\\
                     let $d:(t':T)$\\
                     \textit{Induction hypothesis:} If $d_0:(t_0':T_0)$ and $d_0':(t_0 \rightarrow t_0')$, where $d_0$ $\leq$ $d$, then $t_0:T_0$.\\
@@ -217,7 +218,7 @@
                         {if $t_1$ then $t_2$ else $t_3$ $\Downarrow_{k} v_2$}
                     \inferrule{B-IFFALSE}{$t_1 \Downarrow_{k_1} false$  \quad $t_3 \Downarrow_{k_3} v_3$  \quad $k \geq k_1 + k_3$}
                     {if $t_1$ then $t_2$ else $t_3$ $\Downarrow_{k} v_3$}
-                    \inferrule{B-PLUS}{$t_1 \Downarrow_{k_1} n_1$  \quad $t_2 \Downarrow_{k_2} v_3$ \quad n = n$_1$ $[\![+]\!]$ n$_2$ \quad $k \geq k_1 + k_2$}
+                    \inferrule{B-PLUS}{$t_1 \Downarrow_{k_1} n_1$  \quad $t_2 \Downarrow_{k_2} n_2$ \quad n = n$_1$ $[\![+]\!]$ n$_2$ \quad $k \geq k_1 + k_2$}
                     {($t_1 + t_2$) $\Downarrow_{k} n$}
                     \inferrule{B-GT}{$t_1 \Downarrow_{k_1} n_1$  \quad $t_2 \Downarrow_{k_2} n_2$  \quad  v = n$_1$ $[\![>]\!]$ n$_2$ \quad $k \geq k_1 + k_2$}
                     { $t_1 > t_2$ $\Downarrow_{k} v$}
@@ -228,18 +229,13 @@
                     {if $t_1$ then $t_2$ else $t_3$ $\Downarrow_{k}$ timeout}
                     \inferrule{B-IFFALSETimeout}{$t_1 \Downarrow_{k_1} false$  \quad $t_3 \Downarrow_{k_3} v_3$  \quad $k < k_1 + k_3$}
                     {if $t_1$ then $t_2$ else $t_3$ $\Downarrow_{k}$ timeout}
-                    \inferrule{B-PLUSTimeout}{$t_1 \Downarrow_{k_1} n_1$  \quad $t_2 \Downarrow_{k_2} v_3$ \quad n = n$_1$ $[\![+]\!]$ n$_2$ \quad $k < k_1 + k_2$}
+                    \inferrule{B-PLUSTimeout}{$t_1 \Downarrow_{k_1} n_1$  \quad $t_2 \Downarrow_{k_2} n_2$ \quad n = n$_1$ $[\![+]\!]$ n$_2$ \quad $k < k_1 + k_2$}
                     {($t_1 + t_2$) $\Downarrow_{k}$ timeout}
                     \inferrule{B-GTTimeout}{$t_1 \Downarrow_{k_1} n_1$  \quad $t_2 \Downarrow_{k_2} n_2$  \quad  v = n$_1$ $[\![>]\!]$ n$_2$ \quad $k < k_1 + k_2$}
                     { $t_1 > t_2$ $\Downarrow_{k}$ timeout}
-                \item[(c)]{ Type Soundness Theorem}
-                    We can decompose this into two simple statements:
-                    \begin{enumerate}
-                        \item [Progress]:
-                            If $t:T$ then either $t$ is a value or exists $t'$ such that $t \Downarrow_k t'$, where $t \not\Downarrow_k timeout$
-                        \item[Preservation]:
-                            If $t:T$ and $t \Downarrow_k t'$, where $t \not\Downarrow_k timeout$  , then $t':T$
-                    \end{enumerate}
+                \item[(c)]{ Type Soundness Theorem:}\\
+                    Well-Typed terms do not go wrong.
+                    That is, they do not get stuck eventually.
 
             \end{enumerate}
 
