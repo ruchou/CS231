@@ -195,16 +195,16 @@
                             \item E-IFFALSE: Similar
                             \item E-PLUSRED: Similar
                             \item E-GTRED: Similar
-                            \item E-IF: Then t = $t_1$ then $t_2$ else $t_3$, and t' = $t_1'$ then $t_2$ else $t_3$\\
-                                By IH, $t_1$ has the same type of $t_1'$. Then, by T-IF, $t$ and $t'$ has the same type
+                            \item E-IF: Then t = $t_1$ then $t_2$ else $t_3$, and $t'$ = $t_1'$ then $t_2$ else $t_3$\\
+                                By IH, $t:T$. Both $t$ and $t'$ has the same type $T$
                             \item E-PLUS1: Then t = $t_1$ + $t_2$, and t' = $t_1'$ + $t_2$\\
-                                By IH, $t_1$ has the same type of $t_1'$. Then, by T-PLUS, $t$ and $t'$ has the same type
+                                By IH, $t:T$. Both $t$ and $t'$ has the same type $T$
                             \item E-PLUS2: Then t = $v_1$ + $t_2$, and t' = $v_1$ + $t_2'$\\
-                                By IH, $t_2$ has the same type of $t_2'$. Then, by T-PLUS, $t$ and $t'$ has the same type
+                                By IH, $t:T$. Both $t$ and $t'$ has the same type $T$
                             \item E-GT1: Then t = $t_1$ \textless $t_2$ and t' = $t_1'$ \textless $t_2$\\
-                                By IH, $t_1$ has the same type of $t_1'$. Then, by T-GT, $t$ and $t'$ has the same type
+                                By IH, $t:T$. Both $t$ and $t'$ has the same type $T$
                             \item E-GT2: Then t = $v_1$ \textless $t_2$ and t' = $v_1$ \textless $t_2'$\\
-                                By IH, $t_2$ has the same type of $t_2'$. Then, by T-GT, $t$ and $t'$ has the same type
+                            By IH, $t:T$. Both $t$ and $t'$ has the same type $T$
                         \end{itemize}
                     \end{proof}
 
@@ -236,9 +236,9 @@
                     We can decompose this into two simple statements:
                     \begin{enumerate}
                         \item [Progress]:
-                            If $t:T$ then either $t$ is a value or exists $t'$ such that $t \Downarrow t'$
+                            If $t:T$ then either $t$ is a value or exists $t'$ such that $t \Downarrow_k t'$, where $t \not\Downarrow_k timeout$
                         \item[Preservation]:
-                            If $t:T$ and $t \Downarrow t'$, then $t':T$
+                            If $t:T$ and $t \Downarrow_k t'$, where $t \not\Downarrow_k timeout$  , then $t':T$
                     \end{enumerate}
 
             \end{enumerate}

@@ -215,4 +215,4 @@ P Q
 -----
 P ^ Q
 
-logically and 
+logically and
