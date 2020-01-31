@@ -234,8 +234,7 @@
                     \inferrule{B-GTTimeout}{$t_1 \Downarrow_{k_1} n_1$  \quad $t_2 \Downarrow_{k_2} n_2$  \quad  v = n$_1$ $[\![>]\!]$ n$_2$ \quad $k < k_1 + k_2$}
                     { $t_1 > t_2$ $\Downarrow_{k}$ timeout}
                 \item[(c)]{ Type Soundness Theorem:}\\
-                    Well-Typed terms do not go wrong.
-                    That is, they do not get stuck eventually.
+                    For a term $t$, if there exists $k$ such that $t \Downarrow_k v$, then this term is well-typed and it does not eventually stuck
 
             \end{enumerate}
 
