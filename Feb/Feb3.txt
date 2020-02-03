@@ -1,0 +1,63 @@
+Logical Conjunction
+Pairs are the computation content for logical conjunction
+
+t::= ... | (t,t) | fst t | snd t
+v::= .... | (v,v)
+
+t:T1
+t2:T2
+------------- And-Intro
+(t1,t2): T1 /\ T2
+
+t: T1 /\ T2
+-------------And_Elim1
+(fst t ): T1
+
+t:T1 /\ T2
+------------AndElim2
+(snd t):T2
+
+To prove that (P /\ Q) -> (Q /\ P), I just  have to find a program that has that type
+
+(function pair : P /\ Q) -> (snd pair, fst pair)
+
+Operation Semantics:
+
+t1 -> t1'
+--------------------E-Pair1
+(t1,t2) -> (t1',t2)
+
+t2 -> t2'
+-------------------E-Pair2
+(v1,t2) ->(v1,t2')
+
+/* No computation rule !!!
+need not this
+-------------------
+(v1,v2) -> (v1,v2)
+*/
+
+
+t -> t'
+-------------------E-Fst
+(fst t) -> (fst t')
+
+------------------- E-FstRed
+fst (v1,v2) -> v1
+
+t -> t'
+-------------------E-Snd
+(snd t) -> (snd t')
+
+------------------- E-SndRed
+snd (v1,v2) -> v2
+
+
+Logical Truth and Falsehood
+
+-------------------True-Intro
+   ():True
+
+t:False
+----------False-Elim
+t:T
