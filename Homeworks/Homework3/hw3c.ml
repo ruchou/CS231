@@ -30,4 +30,32 @@ exception TypeError
    and it returns the type of the term, or raises TypeError if the term
    cannot be given a type.  this function should have the same behavior
    as the typechecking rules on the cheat sheet. *)
-let rec typecheck (t:t) (env:env) : typ = raise TypeError
+
+let rec typecheck (t:t) (env:env) : typ = match t with
+    | True -> Bool
+    | Function (x, xType, term) ->(try
+        let t2 = typecheck term ((x,xType)::env) in
+            Arrow(xType, t2)
+        with TypeError -> raise TypeError
+        )
+    | FunCall (t1 , t2) -> ( match (typecheck t1 env) with
+        | Arrow (t2_ , t_) -> if typecheck t2 env = t2_ then t2_ else raise TypeError
+        | _ -> raise TypeError )
+    | Var x ->(try
+                (List.assoc x env)
+            with Not_found -> raise TypeError)
+    | _ -> raise TypeError
+    ;;
+(*((\x:Bool -> x) True)*)
+let t1 =  FunCall(Function("x",Bool,Var "x") ,True) in
+    assert(typecheck t1 [] = Bool)
+    ;;
+
+let t2 = Function("x",Bool,Var "x") in
+    assert(typecheck t2 [] = Arrow(Bool,Bool))
+    ;;
+
+(*(\x:(\y:Bool -> y) -> x)(\y:Bool -> y )*)
+let t3 = FunCall(Function("x",Arrow(Bool,Bool), Var "x"),Function("y",Bool, Var "y")) in
+    assert(typecheck t3 [] = Arrow(Bool,Bool))
+    ;;
