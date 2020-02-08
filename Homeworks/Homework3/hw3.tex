@@ -102,59 +102,17 @@
                         \end{itemize}
                     \end{proof}
             \end{enumerate}
-        \item[4]{Sol}
+        \item[6]{Sol}
             \begin{enumerate}
-                \item [(a)]{New Operational Semantics}
-                     \inferrule{E-AndToIF}{}
-                    {\step{t$_1$ \&\& t$_2$}{if t$_1$ then t$_2$ else false}}
-                \item[(b)]{}
-                    No
+                \item [(a)]{Small-Step Operational Semantics }
+                    \inferrule{E-FOR1}{\step{t$_1$}{t$_1'$}}
+                    {\step{for t$_1$ do t$_2$}{for t$_1'$ do t$_2$}}
+                    \inferrule{E-FORRED1}{ cond = n $[\![>]\!]$ 0 \andalso n' = n $[\![-]\!]$ 1 }
+                    {\step{for n do t$_2$}{ if cond then for n' do t$_2$ else ()}}
+                \item[(b)]{Typing Rule }
+                    \inferrule{T-FOR}{$\Gamma \vdash t_1:\text{int}$ \andalso $\Gamma \vdash t_2:\text{T}$}
+                    { $\Gamma \vdash$ for t$_1$ do t$_2$:Unit}
             \end{enumerate}
-        \item[5] {Sol}
-            \begin{enumerate}
-                \item[(a)]{Remove the rule E-IFFALSE} \\
-                    \begin{enumerate}
-                        \item Progress: Consider the example: \verb|if false then true else true|\\It would violate Progress since it would try to step with E-If but it cannot take a step to t'
-                        \item Preserve: It is still valid because E-IFFALSE would not take a step of evaluation.
-                    \end{enumerate}
-                \item[(b)]{Add the following axiom to the type system: $\frac{}{0:Bool}$}\\
-                    \begin{enumerate}
-                        \item Progress: Consider the example: \verb|if 0 then 231 else 232 |\\It would violate Progress since it would violate the Canonical forms lemma which states that if a value of type Bool is either true of false. It would cause stuck in E-IFTrue or E-IFFalse.
-                        \item Preserve: It is still valid because the term 0  would not take a step of evaluation.
-                    \end{enumerate}
-                \item[(c)]{ Add the following axiom to the operational semantics:}\\
-                    \inferrule{}{}
-                    {\step{if t$_1$ then t$_2$ else t$_3$}{t$_2$}}
-                    \begin{enumerate}
-                        \item Progress: It still valid
-                        \item Preserve: It still valid
-                    \end{enumerate}
-                \item[(d)]{Add the following rules:}
-                    \inferrule{}{}
-                    {\step{false + false }{false}}
-                    \inferrule{}{}
-                    {\step{true + true}{true}}
-                    \inferrule{}{$t1:Bool$ \and $t2:Bool$}
-                    {{t$_1$ + t$_2$:$Int$}}
-                    \begin{enumerate}
-                        \item Progress: It is still valid
-                        \item Preserve: Consider the example: \verb|true + true = true|\\ But true is not a type of Int
-                    \end{enumerate}
-                \item[(e)]{Add the following rules:}
-                    \inferrule{}{}
-                    {\step{if 0 then t$_2$ else t$_3$ }{t$_2$}}
-                    \inferrule{}{\tt t$_1$:Int \and t$_2$:T \and t$_3$:T}
-                    {\tt if t$_1$ then t$_2$ else t$_3$:T}
-
-                \begin{enumerate}
-                        \item Progress: Consider the example: \verb|if 20 then true else false |\\ Then, $t_1 = 20 $ has type of Int.
-                        It, however, does not step.
-                        \item Preserve: It is still valid since for the first inference rule in this example does not take a step
-                    \end{enumerate}
-
-            \end{enumerate}
-
-
 
     \end{description}
 
@@ -193,7 +151,7 @@
 %
 %
 %    \inferrule{E-PlusRed}{n = n$_1$ $[\![+]\!]$ n$_2$}
-%    {\step{n$_1$ + n$_2$}{n}}
+    %%    {\step{n$_1$ + n$_2$}{n}}
 %
 %    \inferrule{E-GT1}{\step{t$_1$}{t$_1'$}}
 %    {\step{t$_1$ > t$_2$}{t$_1'$ > t$_2$}}
