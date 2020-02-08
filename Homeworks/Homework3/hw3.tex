@@ -53,91 +53,51 @@
                     No. the type of f  has to be $Int \rightarrow Int$ in $t2$ and $T \rightarrow Bool$ in $t1$ at the same time
             \end{enumerate}
 
-%            \inferax{E-IfTrue}{\step{if true then t$_2$ else t$_3$}{t$_2$}}
-%
-%            \inferax{E-IfFalse}{\step{if false then t$_2$ else t$_3$}{t$_3$}}
-%
-%            \inferrule{E-If}{\step{t$_1$}{t$_1'$}}
-%            {\step{if t$_1$ then t$_2$ else t$_3$}{if t$_1'$ then t$_2$ else t$_3$}}
-%
-%            \inferrule{E-IfSTuck}{\step{t$_1$}{NonBool}}
-%            {\step{if t$_1$ then t$_2$ else t$_3$}{Stuck}}
-%
-%            \inferrule{E-Plus1}{\step{t$_1$}{t$_1'$}}
-%            {\step{t$_1$ + t$_2$}{t$_1'$ + t$_2$}}
-%
-%            \inferrule{E-Plus1Stuck}{\step{t$_1$}{NonInt}}
-%            {\step{t$_1$ + t$_2$}{Stuck}}
-%
-%            \inferrule{E-Plus2}{\step{t$_2$}{t$_2'$}}
-%            {\step{v$_1$ + t$_2$}{v$_1$ + t$_2'$}}
-%
-%            \inferrule{E-Plus2Stuck}{\step{t$_2$}{NonInt}}
-%            {\step{v$_1$ + t$_2$}{Stuck}}
-%
-%            \inferrule{E-PlusRed}{n = n$_1$ $[\![+]\!]$ n$_2$}
-%            {\step{n$_1$ + n$_2$}{n}}
-%
-%            \inferrule{E-GT1}{\step{t$_1$}{t$_1'$}}
-%            {\step{t$_1$ > t$_2$}{t$_1'$ > t$_2$}}
-%            \inferrule{E-GT1Stuck}{\step{t$_1$}{NonInt}}
-%            {\step{t$_1$ > t$_2$}{Stuck}}
-%
-%            \inferrule{E-GT2}{\step{t$_2$}{t$_2'$}}
-%            {\step{v$_1$ > t$_2$}{v$_1$ > t$_2'$}}
-%            \inferrule{E-GT2Stuck}{\step{t$_2$}{NonInt}}
-%            {\step{v$_1$ > t$_2$}{Stuck}}
-%
-%            \inferrule{E-GTRed}{b = n$_1$ $[\![>]\!]$ n$_2$}
-%            {\step{n$_1$ > n$_2$}{b}}
-        \item [3]{Sol}
+        \item [5]{Sol}
             \begin{enumerate}
-                \item [(a)]{New rules}
-                    \inferrule{E-AND}{\step{t$_1$}{t$_1'$}}
-                    {\step{t$_1$ \&\& t$_2$}{t$_1'$ \&\& t$_2$}}
-                    \inferrule{E-ANDFalse}{v$_1$ $=$ false}
-                    {\step{v$_1$ \&\& t$_2$}{false}}
-                    \inferrule{E-ANDTrue}{v$_1$ $=$ true}
-                    {\step{v$_1$ \&\& t$_2$}{t$_2$}}
-                \item[(b)]{New rules for types}
-                    \inferrule{T-AND}{\tt t$_1$:Bool \and t$_2$:Bool}
-                    {\tt t$_1$ \&\& t$_2$:Bool}
-                \item[(c)]{Proof of Progressive Theorem} \\
-                    Canonical Forms (Bool) : If $v:Bool$, then either $v=true$ or $v=false$.\\
+                \item[(a)]{Proof of Progressive Theorem} \\
                     By induction on the derivation of t:T\\
-                    \textit{Induction hypothesis:} If $t_0:T_0$, where $t_0:T_0$ is a sub-derivation of $t:T$, then either $t_0$ is a value or exists $t_0'$ such that  $t_0$ $\rightarrow$ $t_0'$
+                    \textit{Induction hypothesis:} If $\Gamma \vdash t_0:T_0$, where $\Gamma \vdash t_0:T_0$ is a sub-derivation of $\Gamma \vdash t:T$, then either $t_0$ is a value or exists $t_0'$ such that  $t_0$ $\rightarrow$ $t_0'$
                     \begin{proof}
-                        Case analysis on the root rule in $t:T$.
+                        Case analysis on the root rule in $\Gamma \vdash t:T$.
                         \begin{itemize}
-                            \item Case T-AND: Then t = $t_1$ \&\& $t_2$, where $t:Bool$, $t_1:Bool$, $t_2:Bool$. \\
+                            \item Case T-VAR: Then t = x, which is a value
+                            \item Case T-FUN: Then t = function x:T $\rightarrow$ t , which is a value
+                            \item Case T-APP: Then t = $t_1$ $t_2$, where $\Gamma \vdash t_1 t_2 :T$, $\Gamma \vdash t_1:T2 \rightarrow T $, and $\Gamma \vdash t_2:T2$. \\
                                 By IH, $t_1$ is either a value or there exists $t_1'$ such that $t_1$ $\rightarrow$ $t_1'$, and $t_2$ is either a value or there exists $t_2'$ such that $t_2$ $\rightarrow$ $t_2'$\\
+                                IF $t_1$ is a value, by CFL, $t_1$ has the value v1 with the form $function\ x:T_{12} \rightarrow t_{12}$\\
+                                IF $t_2$ is a value, by CFL, $t_2$ has the value v1 with the form $function\ x:T_{22} \rightarrow t_{22}$\\
                                 Case analysis on $t_1$ and $t_2$
                                 \begin{itemize}
                                     \item Case exists $t_1'$ such that $t_1$ $\rightarrow$ $t_1'$:\\
-                                        Then $t_1$ \&\& $t_2$ $\rightarrow$ $t_1'$ \&\& $t_2$ by E-AND
+                                        Then $t_1\ t_2$ $\rightarrow$ $t_1'\ t_2$ by E-APP1
                                     \item Case $t_1$ is a value $v_1$ and exists $t_2'$ such that $t_2$ $\rightarrow$ $t_2'$\\
-                                        Since $v_1$ is a value, by the Canonical Forms lemma, $t_1$ is either true or false. Then Case Analysis on $v_1$
-                                        \begin{itemize}
-                                            \item Case true, then $v_1$ \&\& $t_2$ $\rightarrow$ $t_2$, by E-ANDTRUE
-                                            \item Case false, then $v_1$ \&\& $t_2$ $\rightarrow$ false by E-ANDFALSE
-                                        \end{itemize}
+                                        Then $t \rightarrow t' = v_1 t_2'$ by E-APP2
+                                    \item Case Both $t_1$ and $t_2$ are values\\
+                                        Then, $t \rightarrow t' = [x \rightarrow v_2]t_{12}$ by E-APPBETA
                                 \end{itemize}
                         \end{itemize}
                     \end{proof}
-                \item[(d)]{Proof of Preservation Theorem}
-                    By induction on the derivation of $t:T$\\
-                    \textit{Induction hypothesis:} If $t_0:T_0$ and $t_0$ $\rightarrow$ $t_0'$, where $t_0:T_0$ is a sub-derivation of $t:T$, then $t_0':T_0$
+                \item[(b)]{Arbitrary Type Environment}\\ let $t_1 = true$ , $t_2 = \text{function \ } y:Bool \rightarrow y $, and $\Gamma = \{(t_1,Bool \rightarrow true)\}$\\
+                   Then $\Gamma \vdash t_1 t_2: bool$ , but $t_1 t_2$ cannot step
+                \item[(c)]{Proof of Preservation Theorem}\\
+                    By induction on the derivation of $\Gamma \vdash t:T$\\
+                    \textit{Induction hypothesis:} If $\Gamma \vdash t_0:T_0$ and $t_0$ $\rightarrow$ $t_0'$, where $\Gamma \vdash t_0:T_0$ is a sub-derivation of $\Gamma \vdash t:T$, then $\Gamma \vdash t_0':T_0$
                     \begin{proof}
-                        Case analysis on the root rule in $t:T$.
+                        Case analysis on the root rule in $\Gamma \vdash t:T$.
                         \begin{itemize}
-                            \item Case T-AND: Then t = $t_1$ \&\& $t_2$, where $t:Bool$, $t_1:Bool$, $t_2:Bool$. \\
-                            Case analysis on the root rule in $t$ $\rightarrow$ $t'$
+                            \item Case T-VAR: Then $t = x$,and $x:T \in \Gamma$.Contradiction ($t$ cannot step)
+                            \item Case T-ABS: Then $t = \text{function\ } x:T_1 \rightarrow t_2 $.Contradiction($t$ cannot step)
+                            \item Case T-APP: Then $t = t_1 t_2$, $\Gamma \vdash t_1: T_{11} \rightarrow T_{12}$,\space  $\Gamma \vdash t_2:T_{11}$,\space and $T=T_{12}$\\
+                            Subcase analysis on $t \rightarrow t'$
                             \begin{itemize}
-                                \item Case E-AND: then $t'$ = $t1'$ \&\& $t_2$\\
-                                    By IH, $t1':Bool$.
-                                    We have $t_1':Bool$, $t_2:Bool$. So $t_1'$ \&\& $t_2$ :$Bool$ by T-AND
-                                \item Case E-ANDFALSE: then $t'$ = $false$. So $t':Bool$ by T-FALSE
-                                \item Case E-ANDTRUE: then $t'$ = $t_2$. Since $t_2:Bool$, $t':Bool$
+                                \item Case E-APP1: Then $t_1 \rightarrow t_1'$ , $t' = t_1't_2$\\
+                                    Since $\Gamma \vdash t_1:T_{11} \rightarrow T_{12}$,and $t_1 \rightarrow t_1'$,\\
+                                    By IH, $\Gamma \vdash t1':T_{11}\rightarrow T_{12}$.
+                                    So, $\Gamma \vdash t':T_{12} = T$ by T-APP
+                                \item Case E-APP2: Then $t_1 = v_1$, $t_2 \rightarrow t2'$, $t'=v_1 v_2'$\\ Similar
+                                \item Case E-APPBETA: Then $t_1 = \text{function\ } x:T_{11} \rightarrow t_{12}$, $t_2 = v_{12}$, $t' = [x \rightarrow v_{12}]t_{12}$\\
+                                    By Inversion Lemma, $\Gamma, x:T_{12} \vdash t_{12}:T_{12}$.\\So, by type substitution lemma, $\Gamma \vdash [x \rightarrow v_{12}]:T_{12} = T$
                             \end{itemize}
                         \end{itemize}
                     \end{proof}
@@ -193,62 +153,8 @@
                     \end{enumerate}
 
             \end{enumerate}
-        \item[6]{Sol}
-            \begin{enumerate}
-                \item[(a)]{Reverse Progress}\\
-                    It still holds true since we can always construct a term $t$ that take steps to some $t'$
-                \item[(b)]{Reverse Preservation}\\
-                    let $d:(t':T)$\\
-                    \textit{Induction hypothesis:} If $d_0:(t_0':T_0)$ and $d_0':(t_0 \rightarrow t_0')$, where $d_0$ $\leq$ $d$, then $t_0:T_0$.\\
-                    By induction on the derivation of $t:T$
-                    \begin{proof}
-                        Case analysis on the form of $t \rightarrow t'$.
-                        \begin{itemize}
-                            \item E-IFTRUE: Contradiction since there is no rule to step
-                            \item E-IFFALSE: Similar
-                            \item E-PLUSRED: Similar
-                            \item E-GTRED: Similar
-                            \item E-IF: Then t = $t_1$ then $t_2$ else $t_3$, and $t'$ = $t_1'$ then $t_2$ else $t_3$\\
-                                By IH, $t:T$. Both $t$ and $t'$ has the same type $T$
-                            \item E-PLUS1: Then t = $t_1$ + $t_2$, and t' = $t_1'$ + $t_2$\\
-                                By IH, $t:T$. Both $t$ and $t'$ has the same type $T$
-                            \item E-PLUS2: Then t = $v_1$ + $t_2$, and t' = $v_1$ + $t_2'$\\
-                                By IH, $t:T$. Both $t$ and $t'$ has the same type $T$
-                            \item E-GT1: Then t = $t_1$ \textless $t_2$ and t' = $t_1'$ \textless $t_2$\\
-                                By IH, $t:T$. Both $t$ and $t'$ has the same type $T$
-                            \item E-GT2: Then t = $v_1$ \textless $t_2$ and t' = $v_1$ \textless $t_2'$\\
-                            By IH, $t:T$. Both $t$ and $t'$ has the same type $T$
-                        \end{itemize}
-                    \end{proof}
 
-            \end{enumerate}
-        \item [(7)]{Sol}
-            \begin{enumerate}
-                \item [(a)]{New Big-Step Rules}
-                    \inferrule{B-VAL}{k $\geq$ 1}{v $\Downarrow_k$ v}
-                    \inferrule{B-IFTRUE}{$t_1 \Downarrow_{k_1} true$  \quad $t_2 \Downarrow_{k_2} v_2$  \quad $k \geq k_1 + k_2$}
-                        {if $t_1$ then $t_2$ else $t_3$ $\Downarrow_{k} v_2$}
-                    \inferrule{B-IFFALSE}{$t_1 \Downarrow_{k_1} false$  \quad $t_3 \Downarrow_{k_3} v_3$  \quad $k \geq k_1 + k_3$}
-                    {if $t_1$ then $t_2$ else $t_3$ $\Downarrow_{k} v_3$}
-                    \inferrule{B-PLUS}{$t_1 \Downarrow_{k_1} n_1$  \quad $t_2 \Downarrow_{k_2} n_2$ \quad n = n$_1$ $[\![+]\!]$ n$_2$ \quad $k \geq k_1 + k_2$}
-                    {($t_1 + t_2$) $\Downarrow_{k} n$}
-                    \inferrule{B-GT}{$t_1 \Downarrow_{k_1} n_1$  \quad $t_2 \Downarrow_{k_2} n_2$  \quad  v = n$_1$ $[\![>]\!]$ n$_2$ \quad $k \geq k_1 + k_2$}
-                    { $t_1 > t_2$ $\Downarrow_{k} v$}
-                \item[(b)]{New Big-Step Rules}
-                    \inferax{B-Timeout}{t $\Downarrow_0$ timeout}
-                    \inferrule{B-VALTimeout}{k $<$ 1}{v $\Downarrow_k$ v}
-                    \inferrule{B-IFTRUETimeout}{$t_1 \Downarrow_{k_1} true$  \quad $t_2 \Downarrow_{k_2} v_2$  \quad $k < k_1 + k_2$}
-                    {if $t_1$ then $t_2$ else $t_3$ $\Downarrow_{k}$ timeout}
-                    \inferrule{B-IFFALSETimeout}{$t_1 \Downarrow_{k_1} false$  \quad $t_3 \Downarrow_{k_3} v_3$  \quad $k < k_1 + k_3$}
-                    {if $t_1$ then $t_2$ else $t_3$ $\Downarrow_{k}$ timeout}
-                    \inferrule{B-PLUSTimeout}{$t_1 \Downarrow_{k_1} n_1$  \quad $t_2 \Downarrow_{k_2} n_2$ \quad n = n$_1$ $[\![+]\!]$ n$_2$ \quad $k < k_1 + k_2$}
-                    {($t_1 + t_2$) $\Downarrow_{k}$ timeout}
-                    \inferrule{B-GTTimeout}{$t_1 \Downarrow_{k_1} n_1$  \quad $t_2 \Downarrow_{k_2} n_2$  \quad  v = n$_1$ $[\![>]\!]$ n$_2$ \quad $k < k_1 + k_2$}
-                    { $t_1 > t_2$ $\Downarrow_{k}$ timeout}
-                \item[(c)]{ Type Soundness Theorem:}\\
-                    For a term $t$, if there exists $k$ such that $t \Downarrow_k v$, then this term is well-typed and it does not eventually stuck
 
-            \end{enumerate}
 
     \end{description}
 
