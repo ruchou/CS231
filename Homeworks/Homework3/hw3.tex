@@ -1,0 +1,304 @@
+\documentclass{article}
+\topmargin = -0.5in
+\oddsidemargin = 0in
+\evensidemargin = \oddsidemargin
+\textwidth = 6.5in
+\textheight = 9in
+\usepackage{times}
+\usepackage{bcprules}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\newcommand{\mathType}[2]{\mathtt{#1}:\mathtt{#2}}
+
+\newcommand{\step}[2]{{\tt #1} $\longrightarrow$ {\tt #2}}
+
+\newcommand{\inferrule}[3]{\infrule[#1]{\mbox{#2}}{\mbox{#3}}}
+\newcommand{\inferax}[2]{\infrule[#1]{\mbox{}}{\mbox{#2}}}
+
+\newtheorem{example}{Example}
+
+\title{Homework 3}
+
+\author{Yan-Ru Jhou, Nurrachman Liu}
+
+\date{Feb 7th, 2020}
+
+\begin{document}
+
+    \maketitle
+
+    \begin{description}
+        \item[4]{Sol}\\
+            \begin{enumerate}
+                \item[(a)] { \tt f (if x then 0 else 1)}\\
+                    \begin{equation*}
+                        \Gamma = \{ \mathType{x}{Bool}, \mathType{f}{Int \rightarrow T} \}
+                    \end{equation*}
+                            \inferrule{T-APP}{
+                                $\cfrac{}{\Gamma \vdash \text{f} :  \text{Int} \rightarrow \text{T}}$(T-Var)
+                                 \andalso
+                                $\cfrac{ \cfrac{}{\Gamma \vdash \text{x} : \text{Bool}}\text{(T-Var)} \quad \cfrac{}{0:\text{Int}}\text{(T-Num)} \quad  \cfrac{}{1:\text{Int}}\text{(T-Num)} }{\Gamma \vdash \text{if x then 0 else 1} :  \text{Int}}$(T-IF)
+                            }{$\Gamma \vdash \text{f (if x then 0 else 1)} : \text{T} $}
+                \item[(b)] {\tt f (if (f x) then 0 else 1)}
+                    \begin{equation*}
+                                   \Gamma = \{ \mathType{x}{Int}, \mathType{f}{Int \rightarrow Bool} \}
+                    \end{equation*}
+                \inferrule{T-APP}{
+                    $\cfrac{}{\Gamma \vdash \text{f} :  \text{Int} \rightarrow \text{T}}$(T-Var)
+                    \andalso
+                    $\cfrac{ \cfrac{ \cfrac{}{\Gamma \vdash \text{f} : \text{Int} \rightarrow \text{Bool} }\text{(T-Var)} \quad \cfrac{}{\Gamma \vdash \text{x : Int}}\text{(T-Var)}  }{\Gamma \vdash \text{f x} : \text{Bool}}\text{(T-App)} \quad \cfrac{}{0:\text{Int}}\text{(T-Num)} \quad  \cfrac{}{1:\text{Int}}\text{(T-Num)} }
+                    {\Gamma \vdash \text{f (if (f x) then 0 else 1)} :  \text{Int}}$(T-IF)
+                    }{$\Gamma \vdash \text{f (if (f x) then 0 else 1)} : \text{T} $}
+                \item[(c)] {\tt f (if (f x) then (f 0) else 1)}\\
+                    No. the type of f  has to be $Int \rightarrow Int$ in $t2$ and $T \rightarrow Bool$ in $t1$ at the same time
+            \end{enumerate}
+
+%            \inferax{E-IfTrue}{\step{if true then t$_2$ else t$_3$}{t$_2$}}
+%
+%            \inferax{E-IfFalse}{\step{if false then t$_2$ else t$_3$}{t$_3$}}
+%
+%            \inferrule{E-If}{\step{t$_1$}{t$_1'$}}
+%            {\step{if t$_1$ then t$_2$ else t$_3$}{if t$_1'$ then t$_2$ else t$_3$}}
+%
+%            \inferrule{E-IfSTuck}{\step{t$_1$}{NonBool}}
+%            {\step{if t$_1$ then t$_2$ else t$_3$}{Stuck}}
+%
+%            \inferrule{E-Plus1}{\step{t$_1$}{t$_1'$}}
+%            {\step{t$_1$ + t$_2$}{t$_1'$ + t$_2$}}
+%
+%            \inferrule{E-Plus1Stuck}{\step{t$_1$}{NonInt}}
+%            {\step{t$_1$ + t$_2$}{Stuck}}
+%
+%            \inferrule{E-Plus2}{\step{t$_2$}{t$_2'$}}
+%            {\step{v$_1$ + t$_2$}{v$_1$ + t$_2'$}}
+%
+%            \inferrule{E-Plus2Stuck}{\step{t$_2$}{NonInt}}
+%            {\step{v$_1$ + t$_2$}{Stuck}}
+%
+%            \inferrule{E-PlusRed}{n = n$_1$ $[\![+]\!]$ n$_2$}
+%            {\step{n$_1$ + n$_2$}{n}}
+%
+%            \inferrule{E-GT1}{\step{t$_1$}{t$_1'$}}
+%            {\step{t$_1$ > t$_2$}{t$_1'$ > t$_2$}}
+%            \inferrule{E-GT1Stuck}{\step{t$_1$}{NonInt}}
+%            {\step{t$_1$ > t$_2$}{Stuck}}
+%
+%            \inferrule{E-GT2}{\step{t$_2$}{t$_2'$}}
+%            {\step{v$_1$ > t$_2$}{v$_1$ > t$_2'$}}
+%            \inferrule{E-GT2Stuck}{\step{t$_2$}{NonInt}}
+%            {\step{v$_1$ > t$_2$}{Stuck}}
+%
+%            \inferrule{E-GTRed}{b = n$_1$ $[\![>]\!]$ n$_2$}
+%            {\step{n$_1$ > n$_2$}{b}}
+        \item [3]{Sol}
+            \begin{enumerate}
+                \item [(a)]{New rules}
+                    \inferrule{E-AND}{\step{t$_1$}{t$_1'$}}
+                    {\step{t$_1$ \&\& t$_2$}{t$_1'$ \&\& t$_2$}}
+                    \inferrule{E-ANDFalse}{v$_1$ $=$ false}
+                    {\step{v$_1$ \&\& t$_2$}{false}}
+                    \inferrule{E-ANDTrue}{v$_1$ $=$ true}
+                    {\step{v$_1$ \&\& t$_2$}{t$_2$}}
+                \item[(b)]{New rules for types}
+                    \inferrule{T-AND}{\tt t$_1$:Bool \and t$_2$:Bool}
+                    {\tt t$_1$ \&\& t$_2$:Bool}
+                \item[(c)]{Proof of Progressive Theorem} \\
+                    Canonical Forms (Bool) : If $v:Bool$, then either $v=true$ or $v=false$.\\
+                    By induction on the derivation of t:T\\
+                    \textit{Induction hypothesis:} If $t_0:T_0$, where $t_0:T_0$ is a sub-derivation of $t:T$, then either $t_0$ is a value or exists $t_0'$ such that  $t_0$ $\rightarrow$ $t_0'$
+                    \begin{proof}
+                        Case analysis on the root rule in $t:T$.
+                        \begin{itemize}
+                            \item Case T-AND: Then t = $t_1$ \&\& $t_2$, where $t:Bool$, $t_1:Bool$, $t_2:Bool$. \\
+                                By IH, $t_1$ is either a value or there exists $t_1'$ such that $t_1$ $\rightarrow$ $t_1'$, and $t_2$ is either a value or there exists $t_2'$ such that $t_2$ $\rightarrow$ $t_2'$\\
+                                Case analysis on $t_1$ and $t_2$
+                                \begin{itemize}
+                                    \item Case exists $t_1'$ such that $t_1$ $\rightarrow$ $t_1'$:\\
+                                        Then $t_1$ \&\& $t_2$ $\rightarrow$ $t_1'$ \&\& $t_2$ by E-AND
+                                    \item Case $t_1$ is a value $v_1$ and exists $t_2'$ such that $t_2$ $\rightarrow$ $t_2'$\\
+                                        Since $v_1$ is a value, by the Canonical Forms lemma, $t_1$ is either true or false. Then Case Analysis on $v_1$
+                                        \begin{itemize}
+                                            \item Case true, then $v_1$ \&\& $t_2$ $\rightarrow$ $t_2$, by E-ANDTRUE
+                                            \item Case false, then $v_1$ \&\& $t_2$ $\rightarrow$ false by E-ANDFALSE
+                                        \end{itemize}
+                                \end{itemize}
+                        \end{itemize}
+                    \end{proof}
+                \item[(d)]{Proof of Preservation Theorem}
+                    By induction on the derivation of $t:T$\\
+                    \textit{Induction hypothesis:} If $t_0:T_0$ and $t_0$ $\rightarrow$ $t_0'$, where $t_0:T_0$ is a sub-derivation of $t:T$, then $t_0':T_0$
+                    \begin{proof}
+                        Case analysis on the root rule in $t:T$.
+                        \begin{itemize}
+                            \item Case T-AND: Then t = $t_1$ \&\& $t_2$, where $t:Bool$, $t_1:Bool$, $t_2:Bool$. \\
+                            Case analysis on the root rule in $t$ $\rightarrow$ $t'$
+                            \begin{itemize}
+                                \item Case E-AND: then $t'$ = $t1'$ \&\& $t_2$\\
+                                    By IH, $t1':Bool$.
+                                    We have $t_1':Bool$, $t_2:Bool$. So $t_1'$ \&\& $t_2$ :$Bool$ by T-AND
+                                \item Case E-ANDFALSE: then $t'$ = $false$. So $t':Bool$ by T-FALSE
+                                \item Case E-ANDTRUE: then $t'$ = $t_2$. Since $t_2:Bool$, $t':Bool$
+                            \end{itemize}
+                        \end{itemize}
+                    \end{proof}
+            \end{enumerate}
+        \item[4]{Sol}
+            \begin{enumerate}
+                \item [(a)]{New Operational Semantics}
+                     \inferrule{E-AndToIF}{}
+                    {\step{t$_1$ \&\& t$_2$}{if t$_1$ then t$_2$ else false}}
+                \item[(b)]{}
+                    No
+            \end{enumerate}
+        \item[5] {Sol}
+            \begin{enumerate}
+                \item[(a)]{Remove the rule E-IFFALSE} \\
+                    \begin{enumerate}
+                        \item Progress: Consider the example: \verb|if false then true else true|\\It would violate Progress since it would try to step with E-If but it cannot take a step to t'
+                        \item Preserve: It is still valid because E-IFFALSE would not take a step of evaluation.
+                    \end{enumerate}
+                \item[(b)]{Add the following axiom to the type system: $\frac{}{0:Bool}$}\\
+                    \begin{enumerate}
+                        \item Progress: Consider the example: \verb|if 0 then 231 else 232 |\\It would violate Progress since it would violate the Canonical forms lemma which states that if a value of type Bool is either true of false. It would cause stuck in E-IFTrue or E-IFFalse.
+                        \item Preserve: It is still valid because the term 0  would not take a step of evaluation.
+                    \end{enumerate}
+                \item[(c)]{ Add the following axiom to the operational semantics:}\\
+                    \inferrule{}{}
+                    {\step{if t$_1$ then t$_2$ else t$_3$}{t$_2$}}
+                    \begin{enumerate}
+                        \item Progress: It still valid
+                        \item Preserve: It still valid
+                    \end{enumerate}
+                \item[(d)]{Add the following rules:}
+                    \inferrule{}{}
+                    {\step{false + false }{false}}
+                    \inferrule{}{}
+                    {\step{true + true}{true}}
+                    \inferrule{}{$t1:Bool$ \and $t2:Bool$}
+                    {{t$_1$ + t$_2$:$Int$}}
+                    \begin{enumerate}
+                        \item Progress: It is still valid
+                        \item Preserve: Consider the example: \verb|true + true = true|\\ But true is not a type of Int
+                    \end{enumerate}
+                \item[(e)]{Add the following rules:}
+                    \inferrule{}{}
+                    {\step{if 0 then t$_2$ else t$_3$ }{t$_2$}}
+                    \inferrule{}{\tt t$_1$:Int \and t$_2$:T \and t$_3$:T}
+                    {\tt if t$_1$ then t$_2$ else t$_3$:T}
+
+                \begin{enumerate}
+                        \item Progress: Consider the example: \verb|if 20 then true else false |\\ Then, $t_1 = 20 $ has type of Int.
+                        It, however, does not step.
+                        \item Preserve: It is still valid since for the first inference rule in this example does not take a step
+                    \end{enumerate}
+
+            \end{enumerate}
+        \item[6]{Sol}
+            \begin{enumerate}
+                \item[(a)]{Reverse Progress}\\
+                    It still holds true since we can always construct a term $t$ that take steps to some $t'$
+                \item[(b)]{Reverse Preservation}\\
+                    let $d:(t':T)$\\
+                    \textit{Induction hypothesis:} If $d_0:(t_0':T_0)$ and $d_0':(t_0 \rightarrow t_0')$, where $d_0$ $\leq$ $d$, then $t_0:T_0$.\\
+                    By induction on the derivation of $t:T$
+                    \begin{proof}
+                        Case analysis on the form of $t \rightarrow t'$.
+                        \begin{itemize}
+                            \item E-IFTRUE: Contradiction since there is no rule to step
+                            \item E-IFFALSE: Similar
+                            \item E-PLUSRED: Similar
+                            \item E-GTRED: Similar
+                            \item E-IF: Then t = $t_1$ then $t_2$ else $t_3$, and $t'$ = $t_1'$ then $t_2$ else $t_3$\\
+                                By IH, $t:T$. Both $t$ and $t'$ has the same type $T$
+                            \item E-PLUS1: Then t = $t_1$ + $t_2$, and t' = $t_1'$ + $t_2$\\
+                                By IH, $t:T$. Both $t$ and $t'$ has the same type $T$
+                            \item E-PLUS2: Then t = $v_1$ + $t_2$, and t' = $v_1$ + $t_2'$\\
+                                By IH, $t:T$. Both $t$ and $t'$ has the same type $T$
+                            \item E-GT1: Then t = $t_1$ \textless $t_2$ and t' = $t_1'$ \textless $t_2$\\
+                                By IH, $t:T$. Both $t$ and $t'$ has the same type $T$
+                            \item E-GT2: Then t = $v_1$ \textless $t_2$ and t' = $v_1$ \textless $t_2'$\\
+                            By IH, $t:T$. Both $t$ and $t'$ has the same type $T$
+                        \end{itemize}
+                    \end{proof}
+
+            \end{enumerate}
+        \item [(7)]{Sol}
+            \begin{enumerate}
+                \item [(a)]{New Big-Step Rules}
+                    \inferrule{B-VAL}{k $\geq$ 1}{v $\Downarrow_k$ v}
+                    \inferrule{B-IFTRUE}{$t_1 \Downarrow_{k_1} true$  \quad $t_2 \Downarrow_{k_2} v_2$  \quad $k \geq k_1 + k_2$}
+                        {if $t_1$ then $t_2$ else $t_3$ $\Downarrow_{k} v_2$}
+                    \inferrule{B-IFFALSE}{$t_1 \Downarrow_{k_1} false$  \quad $t_3 \Downarrow_{k_3} v_3$  \quad $k \geq k_1 + k_3$}
+                    {if $t_1$ then $t_2$ else $t_3$ $\Downarrow_{k} v_3$}
+                    \inferrule{B-PLUS}{$t_1 \Downarrow_{k_1} n_1$  \quad $t_2 \Downarrow_{k_2} n_2$ \quad n = n$_1$ $[\![+]\!]$ n$_2$ \quad $k \geq k_1 + k_2$}
+                    {($t_1 + t_2$) $\Downarrow_{k} n$}
+                    \inferrule{B-GT}{$t_1 \Downarrow_{k_1} n_1$  \quad $t_2 \Downarrow_{k_2} n_2$  \quad  v = n$_1$ $[\![>]\!]$ n$_2$ \quad $k \geq k_1 + k_2$}
+                    { $t_1 > t_2$ $\Downarrow_{k} v$}
+                \item[(b)]{New Big-Step Rules}
+                    \inferax{B-Timeout}{t $\Downarrow_0$ timeout}
+                    \inferrule{B-VALTimeout}{k $<$ 1}{v $\Downarrow_k$ v}
+                    \inferrule{B-IFTRUETimeout}{$t_1 \Downarrow_{k_1} true$  \quad $t_2 \Downarrow_{k_2} v_2$  \quad $k < k_1 + k_2$}
+                    {if $t_1$ then $t_2$ else $t_3$ $\Downarrow_{k}$ timeout}
+                    \inferrule{B-IFFALSETimeout}{$t_1 \Downarrow_{k_1} false$  \quad $t_3 \Downarrow_{k_3} v_3$  \quad $k < k_1 + k_3$}
+                    {if $t_1$ then $t_2$ else $t_3$ $\Downarrow_{k}$ timeout}
+                    \inferrule{B-PLUSTimeout}{$t_1 \Downarrow_{k_1} n_1$  \quad $t_2 \Downarrow_{k_2} n_2$ \quad n = n$_1$ $[\![+]\!]$ n$_2$ \quad $k < k_1 + k_2$}
+                    {($t_1 + t_2$) $\Downarrow_{k}$ timeout}
+                    \inferrule{B-GTTimeout}{$t_1 \Downarrow_{k_1} n_1$  \quad $t_2 \Downarrow_{k_2} n_2$  \quad  v = n$_1$ $[\![>]\!]$ n$_2$ \quad $k < k_1 + k_2$}
+                    { $t_1 > t_2$ $\Downarrow_{k}$ timeout}
+                \item[(c)]{ Type Soundness Theorem:}\\
+                    For a term $t$, if there exists $k$ such that $t \Downarrow_k v$, then this term is well-typed and it does not eventually stuck
+
+            \end{enumerate}
+
+    \end{description}
+
+%    \section{Language of Booleans and Integers}
+%
+%    \subsection{Syntax}
+%
+%    \begin{tt}
+%        \begin{tabular}{rrl}
+%            t & ::= & b $\mid$ if t then t else t \\
+%            &$\mid$& n $\mid$ t + t $\mid$ t > t \\
+%            b & ::= & true $\mid$ false \\
+%            n & ::= & \mbox{\rm integer constant} \\
+%            v & ::= & b $\mid$ n \\
+%        \end{tabular}
+%    \end{tt}
+%
+%
+%    \subsection{Small-Step Operational Semantics}
+%
+%
+%    \inferax{E-IfTrue}{\step{if true then t$_2$ else t$_3$}{t$_2$}}
+%
+%    \inferax{E-IfFalse}{\step{if false then t$_2$ else t$_3$}{t$_3$}}
+%
+%    \inferrule{E-If}{\step{t$_1$}{t$_1'$}}
+%    {\step{if t$_1$ then t$_2$ else t$_3$}{if t$_1'$ then t$_2$ else t$_3$}}
+%
+%
+%    \inferrule{E-Plus1}{\step{t$_1$}{t$_1'$}}
+%    {\step{t$_1$ + t$_2$}{t$_1'$ + t$_2$}}
+%
+%
+%    \inferrule{E-Plus2}{\step{t$_2$}{t$_2'$}}
+%    {\step{v$_1$ + t$_2$}{v$_1$ + t$_2'$}}
+%
+%
+%    \inferrule{E-PlusRed}{n = n$_1$ $[\![+]\!]$ n$_2$}
+%    {\step{n$_1$ + n$_2$}{n}}
+%
+%    \inferrule{E-GT1}{\step{t$_1$}{t$_1'$}}
+%    {\step{t$_1$ > t$_2$}{t$_1'$ > t$_2$}}
+%
+%
+%    \inferrule{E-GT2}{\step{t$_2$}{t$_2'$}}
+%    {\step{v$_1$ > t$_2$}{v$_1$ > t$_2'$}}
+%
+%
+%    \inferrule{E-GTRed}{b = n$_1$ $[\![>]\!]$ n$_2$}
+%    {\step{n$_1$ > n$_2$}{b}}
+
+
+\end{document}
