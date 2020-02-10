@@ -61,3 +61,128 @@ Logical Truth and Falsehood
 t:False
 ----------False-Elim
 t:T
+
+t ---> t'
+------------------
+for n do t -->  t; (for n-1 do t)
+
+
+
+----------------------------
+Logical Disjunction
+
+
+t ::= ... |left t | right t
+    | match t with  left x -> t '|' right x -> t
+
+v ::= ... | left v | right v
+
+G |- t1:T1
+--------------Or-Intro1
+G |- left t1:T1 \/ T2
+
+G |- t2 :T2
+---------------Or-Intro2
+G |- right t2: T1 \/ T2
+
+
+G |- t: T1 \/ T2
+G,x1:T1 |- t1: T
+G,x2:T2 |- t2: T
+---------------------------------------------------- OR-Elim
+G |- match t with left x1 -> t1 '|' right x2 -> t2 : T
+
+Operational Semantics
+
+t --> t'
+----------------E-Left
+left t --> left t1'
+
+t --> t'
+-------------E-Right
+right t --> right t'
+
+t --> t'
+------------------------- E-Match
+match t with left x1 -> t1 '|' right x2 -> t2 --->
+    match t' with left x1 -> t1 '|' right x2 -> t2
+
+------------------------E-MatchLeft
+match (left v) with left x1 -> t1 '|' right x2 -> t2 --->
+    t1[x1 |-> v]
+
+------------------------E-MatchRight
+match (right v) with left x1 -> t1 '|' right x2 -> t2 --->
+    t2[x2 |-> v]
+
+//
+deriving t : T
+    "program t has type T"
+    "t witness the validity of proposition T"
+
+    (A \/ B) -> (B\/A)
+
+    fun x:A \/ B->
+        match x with
+            left x1 -> right x1
+            |right x2 -> left x2
+
+Negation:
+
+~T is just a shorthand for (T -> False)
+
+Can't prove A \/ ~A holds.
+
+There are still things you can do with negation:
+    ~A /\ (A \/ B) -> B
+    ((A -> False) /\ (A \/ B)) -> B
+
+    function pair : ((A -> False) /\ (A \/ B)) ->
+        match snd pair with
+            left x1 -> (fst pair )x1
+            |right x2 -> x2
+
+Extensions:
+t :: ...  | let x = t1 in t2 | let rec x=t1 in t2
+v ::= ...
+
+
+t1 -> t1'
+-------------------------E-Let
+let x= t1 in t2 --> let x = t1' in t2
+
+-------------------------------------E-LetRed
+let x = v1 in t2 ------> t2[x |-> v1]
+
+t1;t2 is shorthand for let x = t1 in t2, where x is not free in t2
+
+G |- t1 : T1
+G,x:T1 |- t2:T2
+
+-------------------------------T-Let
+G |- let x=t1 in t2: T2
+
+
+Recursion:
+
+------------------------------ E-Letrec
+let rec x = v1 in t2 ---->   //x is a recursive function
+    let x = v1[x |-> let rec x=v1 in x] in t2
+              //make a copy in its body branches function call
+
+
+e.g.
+let rec f = function x:Int -> f x in (f 0) -->
+    let f = function x:Int ->(let rec f = function x:Int -> f x in f) x in (f 0)
+    ---> //let f in (f 0)
+        (function x:Int ->(let rec f = function x:Int -> f x in f) x) 0
+    ---> //beta
+       (let rec f = function x:Int -> f x in f) 0
+
+
+G,x:T1 |- v1: T1
+G,x:T1 |- t2: T2
+--------------------T-LetRec
+G |- let rec x=v1 in t2:T2
+
+List = True \/ (Int /\ List)
