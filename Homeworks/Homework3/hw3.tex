@@ -35,18 +35,18 @@
                         \Gamma = \{ \mathType{x}{Bool}, \mathType{f}{Int \rightarrow T} \}
                     \end{equation*}
                             \inferrule{T-APP}{
-                                $\cfrac{}{\Gamma \vdash \text{f} :  \text{Int} \rightarrow \text{T}}$(T-Var)
+                                $\cfrac{\Gamma(f) = T}{\Gamma \vdash \text{f} :  \text{Int} \rightarrow \text{T}}$(T-Var)
                                  \andalso
-                                $\cfrac{ \cfrac{}{\Gamma \vdash \text{x} : \text{Bool}}\text{(T-Var)} \quad \cfrac{}{0:\text{Int}}\text{(T-Num)} \quad  \cfrac{}{1:\text{Int}}\text{(T-Num)} }{\Gamma \vdash \text{if x then 0 else 1} :  \text{Int}}$(T-IF)
+                                $\cfrac{ \cfrac{\Gamma(x) = Bool}{\Gamma \vdash \text{x} : \text{Bool}}\text{(T-Var)} \quad \cfrac{}{0:\text{Int}}\text{(T-Num)} \quad  \cfrac{}{1:\text{Int}}\text{(T-Num)} }{\Gamma \vdash \text{if x then 0 else 1} :  \text{Int}}$(T-IF)
                             }{$\Gamma \vdash \text{f (if x then 0 else 1)} : \text{T} $}
                 \item[(b)] {\tt f (if (f x) then 0 else 1)}
                     \begin{equation*}
                                    \Gamma = \{ \mathType{x}{Int}, \mathType{f}{Int \rightarrow Bool} \}
                     \end{equation*}
                 \inferrule{T-APP}{
-                    $\cfrac{}{\Gamma \vdash \text{f} :  \text{Int} \rightarrow \text{T}}$(T-Var)
+                    $\cfrac{\Gamma(f):Int\rightarrow T}{\Gamma \vdash \text{f} :  \text{Int} \rightarrow \text{T}}$(T-Var)
                     \andalso
-                    $\cfrac{ \cfrac{ \cfrac{}{\Gamma \vdash \text{f} : \text{Int} \rightarrow \text{Bool} }\text{(T-Var)} \quad \cfrac{}{\Gamma \vdash \text{x : Int}}\text{(T-Var)}  }{\Gamma \vdash \text{f x} : \text{Bool}}\text{(T-App)} \quad \cfrac{}{0:\text{Int}}\text{(T-Num)} \quad  \cfrac{}{1:\text{Int}}\text{(T-Num)} }
+                    $\cfrac{ \cfrac{ \cfrac{\Gamma(f):Int\rightarrow T}{\Gamma \vdash \text{f} : \text{Int} \rightarrow \text{Bool} }\text{(T-Var)} \quad \cfrac{\Gamma(x):Int}{\Gamma \vdash \text{x : Int}}\text{(T-Var)}  }{\Gamma \vdash \text{f x} : \text{Bool}}\text{(T-App)} \quad \cfrac{}{0:\text{Int}}\text{(T-Num)} \quad  \cfrac{}{1:\text{Int}}\text{(T-Num)} }
                     {\Gamma \vdash \text{f (if (f x) then 0 else 1)} :  \text{Int}}$(T-IF)
                     }{$\Gamma \vdash \text{f (if (f x) then 0 else 1)} : \text{T} $}
                 \item[(c)] {\tt f (if (f x) then (f 0) else 1)}\\
