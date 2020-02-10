@@ -35,7 +35,7 @@
                         \Gamma = \{ \mathType{x}{Bool}, \mathType{f}{Int \rightarrow T} \}
                     \end{equation*}
                             \inferrule{T-APP}{
-                                $\cfrac{\Gamma(f) = T}{\Gamma \vdash \text{f} :  \text{Int} \rightarrow \text{T}}$(T-Var)
+                                $\cfrac{\Gamma(f) = Int \rightarrow T}{\Gamma \vdash \text{f} :  \text{Int} \rightarrow \text{T}}$(T-Var)
                                  \andalso
                                 $\cfrac{ \cfrac{\Gamma(x) = Bool}{\Gamma \vdash \text{x} : \text{Bool}}\text{(T-Var)} \quad \cfrac{}{0:\text{Int}}\text{(T-Num)} \quad  \cfrac{}{1:\text{Int}}\text{(T-Num)} }{\Gamma \vdash \text{if x then 0 else 1} :  \text{Int}}$(T-IF)
                             }{$\Gamma \vdash \text{f (if x then 0 else 1)} : \text{T} $}
@@ -44,11 +44,11 @@
                                    \Gamma = \{ \mathType{x}{Int}, \mathType{f}{Int \rightarrow Bool} \}
                     \end{equation*}
                 \inferrule{T-APP}{
-                    $\cfrac{\Gamma(f):Int\rightarrow T}{\Gamma \vdash \text{f} :  \text{Int} \rightarrow \text{T}}$(T-Var)
+                    $\cfrac{\Gamma(f):Int\rightarrow Bool}{\Gamma \vdash \text{f} :  \text{Int} \rightarrow \text{Bool}}$(T-Var)
                     \andalso
-                    $\cfrac{ \cfrac{ \cfrac{\Gamma(f):Int\rightarrow T}{\Gamma \vdash \text{f} : \text{Int} \rightarrow \text{Bool} }\text{(T-Var)} \quad \cfrac{\Gamma(x):Int}{\Gamma \vdash \text{x : Int}}\text{(T-Var)}  }{\Gamma \vdash \text{f x} : \text{Bool}}\text{(T-App)} \quad \cfrac{}{0:\text{Int}}\text{(T-Num)} \quad  \cfrac{}{1:\text{Int}}\text{(T-Num)} }
+                    $\cfrac{ \cfrac{ \cfrac{\Gamma(f):Int\rightarrow Bool}{\Gamma \vdash \text{f} : \text{Int} \rightarrow \text{Bool} }\text{(T-Var)} \quad \cfrac{\Gamma(x):Int}{\Gamma \vdash \text{x : Int}}\text{(T-Var)}  }{\Gamma \vdash \text{f x} : \text{Bool}}\text{(T-App)} \quad \cfrac{}{0:\text{Int}}\text{(T-Num)} \quad  \cfrac{}{1:\text{Int}}\text{(T-Num)} }
                     {\Gamma \vdash \text{f (if (f x) then 0 else 1)} :  \text{Int}}$(T-IF)
-                    }{$\Gamma \vdash \text{f (if (f x) then 0 else 1)} : \text{T} $}
+                    }{$\Gamma \vdash \text{f (if (f x) then 0 else 1)} : \text{Bool} $}
                 \item[(c)] {\tt f (if (f x) then (f 0) else 1)}\\
                     No. the type of f  has to be $Int \rightarrow Int$ in $t2$ and $T \rightarrow Bool$ in $t1$ at the same time
             \end{enumerate}
@@ -56,17 +56,17 @@
         \item [5]{Sol}
             \begin{enumerate}
                 \item[(a)]{Proof of Progressive Theorem} \\
-                    By induction on the derivation of t:T\\
-                    \textit{Induction hypothesis:} If $\Gamma \vdash t_0:T_0$, where $\Gamma \vdash t_0:T_0$ is a sub-derivation of $\Gamma \vdash t:T$, then either $t_0$ is a value or exists $t_0'$ such that  $t_0$ $\rightarrow$ $t_0'$
+                    By induction on the derivation of $\emptyset \vdash t:T$\\
+                    \textit{Induction hypothesis:} If $\emptyset \vdash t_0:T_0$, where $\emptyset \vdash t_0:T_0$ is a sub-derivation of $\emptyset \vdash t:T$, then either $t_0$ is a value or exists $t_0'$ such that  $t_0$ $\rightarrow$ $t_0'$
                     \begin{proof}
-                        Case analysis on the root rule in $\Gamma \vdash t:T$.
+                        Case analysis on the root rule in $\emptyset \vdash t:T$.
                         \begin{itemize}
                             \item Case T-VAR: Then t = x, which is a value
                             \item Case T-FUN: Then t = function x:T $\rightarrow$ t , which is a value
-                            \item Case T-APP: Then t = $t_1$ $t_2$, where $\Gamma \vdash t_1 t_2 :T$, $\Gamma \vdash t_1:T2 \rightarrow T $, and $\Gamma \vdash t_2:T2$. \\
+                            \item Case T-APP: Then t = $t_1$ $t_2$, where $\emptyset \vdash t_1 t_2 :T$, $\emptyset \vdash t_1:T2 \rightarrow T $, and $\emptyset \vdash t_2:T2$. \\
                                 By IH, $t_1$ is either a value or there exists $t_1'$ such that $t_1$ $\rightarrow$ $t_1'$, and $t_2$ is either a value or there exists $t_2'$ such that $t_2$ $\rightarrow$ $t_2'$\\
-                                IF $t_1$ is a value, by CFL, $t_1$ has the value v1 with the form $function\ x:T_{12} \rightarrow t_{12}$\\
-                                IF $t_2$ is a value, by CFL, $t_2$ has the value v1 with the form $function\ x:T_{22} \rightarrow t_{22}$\\
+                                IF $t_1$ is a value, by CFL, $t_1$ has the value $v_1$ with the form $function\ x:T_{12} \rightarrow t_{12}$\\
+                                IF $t_2$ is a value, by CFL, $t_2$ has the value $v_2$ with the form $function\ x:T_{22} \rightarrow t_{22}$\\
                                 Case analysis on $t_1$ and $t_2$
                                 \begin{itemize}
                                     \item Case exists $t_1'$ such that $t_1$ $\rightarrow$ $t_1'$:\\
@@ -78,26 +78,26 @@
                                 \end{itemize}
                         \end{itemize}
                     \end{proof}
-                \item[(b)]{Arbitrary Type Environment}\\ let $t_1 = true$ , $t_2 = \text{function \ } y:Bool \rightarrow y $, and $\Gamma = \{(t_1,Bool \rightarrow true)\}$\\
+                \item[(b)]{Arbitrary Type Environment}\\ let $t_1 = true$ , $t_2 = \text{function \ } y:(Bool \rightarrow Bool): \rightarrow  y $, and $\Gamma = \{(t_1,Bool \rightarrow Bool)\}$\\
                    Then $\Gamma \vdash t_1 t_2: bool$ , but $t_1 t_2$ cannot step
                 \item[(c)]{Proof of Preservation Theorem}\\
-                    By induction on the derivation of $\Gamma \vdash t:T$\\
-                    \textit{Induction hypothesis:} If $\Gamma \vdash t_0:T_0$ and $t_0$ $\rightarrow$ $t_0'$, where $\Gamma \vdash t_0:T_0$ is a sub-derivation of $\Gamma \vdash t:T$, then $\Gamma \vdash t_0':T_0$
+                    By induction on the derivation of $\emptyset \vdash t:T$\\
+                    \textit{Induction hypothesis:} If $\emptyset \vdash t_0:T_0$ and $t_0$ $\rightarrow$ $t_0'$, where $\emptyset \vdash t_0:T_0$ is a sub-derivation of $\emptyset \vdash t:T$, then $\emptyset \vdash t_0':T_0$
                     \begin{proof}
-                        Case analysis on the root rule in $\Gamma \vdash t:T$.
+                        Case analysis on the root rule in $\emptyset \vdash t:T$.
                         \begin{itemize}
-                            \item Case T-VAR: Then $t = x$,and $x:T \in \Gamma$.Contradiction ($t$ cannot step)
-                            \item Case T-ABS: Then $t = \text{function\ } x:T_1 \rightarrow t_2 $.Contradiction($t$ cannot step)
-                            \item Case T-APP: Then $t = t_1 t_2$, $\Gamma \vdash t_1: T_{11} \rightarrow T_{12}$,\space  $\Gamma \vdash t_2:T_{11}$,\space and $T=T_{12}$\\
+                            \item Case T-VAR: Then $t = x$,and $x:T \in \emptyset$. Contradiction ($t$ cannot step)
+                            \item Case T-FUN: Then $t = \text{function\ } x:T_1 \rightarrow t_2 $.Contradiction($t$ cannot step)
+                            \item Case T-APP: Then $t = t_1 t_2$, $\emptyset \vdash t_1: T_{11} \rightarrow T_{12}$,\space  $\emptyset \vdash t_2:T_{11}$,\space and $T=T_{12}$\\
                             Subcase analysis on $t \rightarrow t'$
                             \begin{itemize}
                                 \item Case E-APP1: Then $t_1 \rightarrow t_1'$ , $t' = t_1't_2$\\
-                                    Since $\Gamma \vdash t_1:T_{11} \rightarrow T_{12}$,and $t_1 \rightarrow t_1'$,\\
-                                    By IH, $\Gamma \vdash t1':T_{11}\rightarrow T_{12}$.
-                                    So, $\Gamma \vdash t':T_{12} = T$ by T-APP
-                                \item Case E-APP2: Then $t_1 = v_1$, $t_2 \rightarrow t2'$, $t'=v_1 v_2'$\\ Similar
+                                    Since $\emptyset \vdash t_1:T_{11} \rightarrow T_{12}$,and $t_1 \rightarrow t_1'$,\\
+                                    By IH, $\emptyset \vdash t1':T_{11}\rightarrow T_{12}$.
+                                    So, $\emptyset \vdash t':T_{12} = T$ by T-APP
+                                \item Case E-APP2: Then $t_1 = v_1$, $t_2 \rightarrow t_2'$, $t'=v_1 v_2'$\\ Similar
                                 \item Case E-APPBETA: Then $t_1 = \text{function\ } x:T_{11} \rightarrow t_{12}$, $t_2 = v_{12}$, $t' = [x \rightarrow v_{12}]t_{12}$\\
-                                    By Inversion Lemma, $\Gamma, x:T_{12} \vdash t_{12}:T_{12}$.\\So, by type substitution lemma, $\Gamma \vdash [x \rightarrow v_{12}]:T_{12} = T$
+                                    By Inversion Lemma, $\emptyset, x:T_{12} \vdash t_{12}:T_{12}$.\\So, by type substitution lemma, $\emptyset \vdash [x \rightarrow v_{12}]:T_{12} = T$
                             \end{itemize}
                         \end{itemize}
                     \end{proof}
