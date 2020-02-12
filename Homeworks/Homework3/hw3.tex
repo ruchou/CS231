@@ -78,8 +78,8 @@
                                 \end{itemize}
                         \end{itemize}
                     \end{proof}
-                \item[(b)]{Arbitrary Type Environment}\\ let $t_1 = true$ , $t_2 = \text{function \ } y:Bool \rightarrow  y $, and $\Gamma = \{(t_1,(Bool \rightarrow Bool) \rightarrow Bool)\}$\\
-                   Then $\Gamma \vdash t_1 t_2: bool$ , but $t_1 t_2$ cannot step
+                \item[(b)]{Arbitrary Type Environment}\\No\\ let $t_1 = x$ , $t_2 = \text{function \ } y:Bool \rightarrow  y $, and $\Gamma = \{(x,(Bool \rightarrow Bool) \rightarrow Bool)\}$\\
+                   Then $\Gamma \vdash t_1 t_2: bool$ , but $t_1 t_2$ cannot step and it is not a value
                 \item[(c)]{Proof of Preservation Theorem}\\
                     By induction on the derivation of $\emptyset \vdash t:T$\\
                     \textit{Induction hypothesis:} If $\emptyset \vdash t_0:T_0$ and $t_0$ $\rightarrow$ $t_0'$, where $\emptyset \vdash t_0:T_0$ is a sub-derivation of $\emptyset \vdash t:T$, then $\emptyset \vdash t_0':T_0$
