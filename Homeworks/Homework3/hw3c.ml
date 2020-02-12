@@ -39,7 +39,7 @@ let rec typecheck (t:t) (env:env) : typ = match t with
         with TypeError -> raise TypeError
         )
     | FunCall (t1 , t2) -> ( match (typecheck t1 env) with
-        | Arrow (t2_ , t_) -> if typecheck t2 env = t2_ then t_ else raise TypeError
+        | Arrow (t2_ , t_) -> if (typecheck t2 env) = t2_ then t_ else raise TypeError
         | _ -> raise TypeError )
     | Var x ->(try
                 (List.assoc x env)
@@ -58,4 +58,12 @@ let t2 = Function("x",Bool,Var "x") in
 (*(\x:(\y:Bool -> y) -> x)(\y:Bool -> y )*)
 let t3 = FunCall(Function("x",Arrow(Bool,Bool), Var "x"),Function("y",Bool, Var "y")) in
     assert(typecheck t3 [] = Arrow(Bool,Bool))
+    ;;
+
+let t4 = FunCall(Function("x",Arrow(Arrow(Bool,Bool),Arrow(Bool,Bool)), Var "x"),Function("y",Arrow(Bool,Bool), Var "y")) in
+    assert(typecheck t4 [] = Arrow (Arrow (Bool, Bool), Arrow (Bool, Bool)))
+    ;;
+
+let t5 = Var "joe" in
+    assert(typecheck t5 [("joe",Bool)] = Bool)
     ;;
