@@ -1,0 +1,105 @@
+
+
+first version
+
+Function("x",Plus(Var "x",Int 1))
+
+second version
+
+Function (function x -> Plus(x,Int 1))
+
+
+Type Inference (Chapter 22)
+
+t ::= n | t + t | x | function x:T -> t | t t
+T ::= Int | T -> T
+
+
+Typechecking problem: Given G and t, find T s.t. tha G |- t: T
+
+s ::= n | s + s | x | function x -> s | s s
+S ::= Int | S -> S | X(type variable)
+
+
+erase : t -> s
+
+Type inference problem : Given G ans s, find a t and T s.t. G |- t: T and erase(t) : s.
+
+Judgement form:
+tinfer(G,s) = (S,C)
+
+C is a set of type equality constrains of the form
+{S1= S1', S2=S2',.......Sn=Sn'}
+
+How to turn a typechecking rule into a type inference rule ?
+
+*rewrite each type rule so that it never fails (unless there is a free variable)
+    e.g. true + 5 has a derivation !
+
+* generate a fresh type variable X whenever you would otherwise need to make a guess
+
+
+------------------------- T-Num
+G |- n :Int
+
+type inference:
+
+
+fresh X
+---------------------- I-Num
+tinfer(G,n) = (X, {X=Int})
+
+
+fresh X
+---------------------- I-True
+tinfer(G,true) = (X, {X=Bool})
+
+
+tinfer(G,s1) = (S1,C1)
+tinfer(G,s2) = (S2,C2)
+fresh(x)
+---------------------I-Plus
+tinfer(G,s1+s2) = (X, C1 U C2 U {X=Int, S1= Int, S2= Int})
+
+//e.g function x -> x + 5
+
+
+
+G(x) = S
+fresh(X)
+------------------------ I-Var
+tinfer(G,x) = (X,{X=S})
+
+fresh X0
+tinfer((G,x:X0),t) = (S,C)
+fresh X
+---------------------------- I-Fun
+tinfer(G,function x->t) = (X, C U {X = X0-> S})
+
+
+tinfer(G,s1) = (S1,C1)
+tinfer(G,s2) = (S2,C2)
+fresh X
+-----------------------------I-APP
+tinfer(G,s1 s2) = (X,C1 U C2 U { S1 = S2 -> X })
+
+correctness of type inference:
+Define a substitution sigma as a map from type variable to types.
+
+A substitution sigma *satisfies* a set of constraints C if:
+    C = {S1= S1',....,Sn=Sn'}
+    and
+    sigma(Si) = sigma(Si') for each i
+
+
+
+Soundness of Type Inference
+
+    If tinfer({},s) = ( S,C ) and sigma satisfies C,
+    then there exists t s.t.
+    erase(t) = s and {} |- t : sigma(S)
+
+Completeness of Type Inference
+
+    If {} |- t:T and s = erase(t),
+    then tinfer({},s) = ( S,C ) and there exists sigma  that satisfies C s.t. sigma(S) = T

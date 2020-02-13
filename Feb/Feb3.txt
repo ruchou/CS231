@@ -186,3 +186,6 @@ G,x:T1 |- t2: T2
 G |- let rec x=v1 in t2:T2
 
 List = True \/ (Int /\ List)
+
+
+
