@@ -28,29 +28,16 @@
     \maketitle
 
     \begin{description}
-        \item[4]{Sol}\\
+        \item[1]{Sol}\\
             \begin{enumerate}
-                \item[(a)] { \tt f (if x then 0 else 1)}\\
-                    \begin{equation*}
-                        \Gamma = \{ \mathType{x}{Bool}, \mathType{f}{Int \rightarrow T} \}
-                    \end{equation*}
-                            \inferrule{T-APP}{
-                                $\cfrac{\Gamma(f) = Int \rightarrow T}{\Gamma \vdash \text{f} :  \text{Int} \rightarrow \text{T}}$(T-Var)
-                                 \andalso
-                                $\cfrac{ \cfrac{\Gamma(x) = Bool}{\Gamma \vdash \text{x} : \text{Bool}}\text{(T-Var)} \quad \cfrac{}{0:\text{Int}}\text{(T-Num)} \quad  \cfrac{}{1:\text{Int}}\text{(T-Num)} }{\Gamma \vdash \text{if x then 0 else 1} :  \text{Int}}$(T-IF)
-                            }{$\Gamma \vdash \text{f (if x then 0 else 1)} : \text{T} $}
-                \item[(b)] {\tt f (if (f x) then 0 else 1)}
-                    \begin{equation*}
-                                   \Gamma = \{ \mathType{x}{Int}, \mathType{f}{Int \rightarrow Bool} \}
-                    \end{equation*}
-                \inferrule{T-APP}{
-                    $\cfrac{\Gamma(f):Int\rightarrow Bool}{\Gamma \vdash \text{f} :  \text{Int} \rightarrow \text{Bool}}$(T-Var)
-                    \andalso
-                    $\cfrac{ \cfrac{ \cfrac{\Gamma(f):Int\rightarrow Bool}{\Gamma \vdash \text{f} : \text{Int} \rightarrow \text{Bool} }\text{(T-Var)} \quad \cfrac{\Gamma(x):Int}{\Gamma \vdash \text{x : Int}}\text{(T-Var)}  }{\Gamma \vdash \text{f x} : \text{Bool}}\text{(T-App)} \quad \cfrac{}{0:\text{Int}}\text{(T-Num)} \quad  \cfrac{}{1:\text{Int}}\text{(T-Num)} }
-                    {\Gamma \vdash \text{f (if (f x) then 0 else 1)} :  \text{Int}}$(T-IF)
-                    }{$\Gamma \vdash \text{f (if (f x) then 0 else 1)} : \text{Bool} $}
-                \item[(c)] {\tt f (if (f x) then (f 0) else 1)}\\
-                    No. the type of f  has to be $Int \rightarrow Int$ in $t2$ and $T \rightarrow Bool$ in $t1$ at the same time
+                \item[(a)] { $((A \wedge B) \wedge C) \rightarrow ( A \wedge ( B \wedge C) )$}\\
+                    $ \text{function}\, p:((A \wedge B) \wedge C) \rightarrow ( (fst\,(fst\,p))\; \wedge\; (snd\,(fst\,p) \wedge snd\,c) ) $
+                \item[(b)] {$((A \vee B)\; \vee \; (C))  \rightarrow ( A \; \vee \; (B \vee C))$ }\\
+                    $\text{function}\, p:(A \vee B)\; \vee \; (C))  \rightarrow ((left \: (left\, p)) \; \vee \; ( (right \: (left \: p))  \: \vee \: ( right p) ) )  $
+                \item[(c)]{$((A \; \vee B) \longrightarrow C)$}\\
+                    $\text{function}\, p:((A \; \vee B) \rightarrow C) \longrightarrow (\text{function a:A} \rightarrow p \, a \; \wedge\; \text{function b:B}\rightarrow p \, b )$
+                \item[(c)] {$(A \rightarrow B) \longrightarrow (\neg A \rightarrow \neg B)$}
+                    $\text{function f:}(B \rightarrow false) \longrightarrow \text{function a:A} \longrightarrow f\: (p\: a)$
             \end{enumerate}
 
         \item [5]{Sol}
