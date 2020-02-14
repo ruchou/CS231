@@ -8,6 +8,8 @@
 \usepackage{bcprules}
 \usepackage{amsthm}
 \usepackage{amsmath}
+\usepackage{listings}
+
 \newcommand{\mathType}[2]{\mathtt{#1}:\mathtt{#2}}
 
 \newcommand{\step}[2]{{\tt #1} $\longrightarrow$ {\tt #2}}
@@ -47,12 +49,46 @@
                 \inferrule{T-While}{$\Gamma \vdash t_1 : bool$ \andalso $\Gamma \vdash t_2:T$ }
                 {while t${_1}$ do t${_2}$: True}
             \end{enumerate}
-        \item[6]{Sol}
+        \item[3]{Sol}
             \begin{enumerate}
-                \item [(a)]{Small-Step Operational Semantics }
-
-                \item[(b)]{Typing Rule }
-
+                \item [(a)]{WhileFun}\\
+                    $\text{letrec}\: whileFun = \\ \text{function }t{_1}:(True \rightarrow Bool) \longrightarrow \text{function }t{_2}:(True -> True) \\ in \, \text{if } t_1 \; \text{then } t_2; whileFun \;\; t_1\,t_2 \text{else} ()$
+            \end{enumerate}
+        \item[(4)]{Sol}
+            \begin{enumerate}
+                \item[(a)]{Small-Step}\\
+                    \inferrule{E-Node1}{\step{t${_1}$}{t$_1'$}}
+                    {\step{node(t$_1$,t${_2}$,t${_3}$) }{node(t${_1'}$,t${_2}$,t${_3}$)}}
+                    \inferrule{E-Node2}{\step{t${_2}$}{t$_2'$}}
+                    {\step{node(tv$_1$,t${_2}$,t${_3}$) }{node(tv${_1}$,t${_2'}$,t${_3}$)}}
+                    \inferrule{E-Node3}{\step{t${_3}$}{t$_3'$}}
+                    {\step{node(tv$_1$,t${_2}$,t${_3}$) }{node(tv${_1}$,t${_2}$,t${_3'}$)}}
+                    \inferrule{E-LeftTree}{\step{t$$}{t$'$}}
+                    {\step{leftTree t }{leftTree t${'}$}}
+                    \inferax{E-LeftTreeRed}{\step{leftTree Node(tv${_1}$,v${_2}$,tv${_3}$)}{tv${_1}$}}
+                    \inferrule{E-RightTree}{\step{t$$}{t$'$}}
+                    {\step{RightTree t }{RightTree t${'}$}}
+                    \inferax{E-RightTreeRed}{\step{rightTree Node(tv${_1}$,v${_2}$,tv${_3}$)}{tv${_3}$}}
+                    \inferrule{E-data1}{\step{t$$}{t$'$}}
+                    {\step{data t }{data t${'}$}}
+                    \inferax{E-dataRed}{\step{data node(tv${_1}$,t${_2}$,tv${_3}$)}{t${_2}$}}
+                \item[(b)]{Typing Rules}\\
+                    \inferax{T-leaf}{$\Gamma \vdash \text{leaf}:False \, \text{Tree}$}
+                    \inferrule{T-Node}{$\Gamma \vdash t_1: \text{T Tree}$ \andalso $\Gamma \vdash t_2: T$ \andalso $\Gamma \vdash t_3:\text{T Tree}$ }{$\Gamma \vdash\ node(t_1,t_2,t_3): \text{T Tree} $}
+                    \inferrule{T-leftTree}{$\Gamma \vdash t: \text{T Tree}$}{$\Gamma \vdash \text{leftTree}\, t: \text{T Tree}$}
+                    \inferrule{T-rightTree}{$\Gamma \vdash t: \text{T Tree}$}{$\Gamma \vdash \text{rightTree}\, t: \text{T Tree}$}
+                    \inferrule{T-Data}{ $\Gamma \vdash$ v${_2}$:T}{$\Gamma \vdash$ node(tv${_1}$,v${_2}$,tv${_3}$): T Tree}
+                \item[(c)]{Sol}\\
+                    The typechecker needs to guess types since we allow leaf to be have type false.\\
+                    We could define the tree type as Tree = leaf \textbar node(t1,t2,t3).
+                    For example, in ocaml
+                    \begin{lstlisting}[language=Caml]
+type 'a tree =
+| Leaf
+| Node of 'a * 'a tree * 'a tree
+                    \end{lstlisting}
+                \item[(d)]{No}\\ It would violate Progress.
+                if $data$ leaf then $0$ else $1$
             \end{enumerate}
 
     \end{description}
