@@ -9,6 +9,8 @@
 \usepackage{amsthm}
 \usepackage{amsmath}
 \usepackage{listings}
+\usepackage{mathtools}
+\usepackage{amssymb}
 
 \newcommand{\mathType}[2]{\mathtt{#1}:\mathtt{#2}}
 
@@ -94,8 +96,8 @@ type 'a tree =
             \begin{enumerate}
                 \item [(a)]{Inference Rules}
                     \inferrule{I-Fun}
-                    {$\cfrac{  \cfrac{ \cfrac{}{\text{tinfer}(\{ f:X{_0}, x:X{_1} \},f) = \{ F, \{ f:X{_0} \} \}}    ,    ........}{ \text{fresh } X{_1}, \text{tinfer}(\{f:X{_0}, x:X{_1}\}, f (f x) ) = ........}}{ \text{fresh } X{_0} , \text{ tinfer}(\{f:X{_0}\}, \text{function x} \rightarrow f (f x)) =  .......  } \text{I-Fun}$}
-                    {tinfer($\emptyset$, function f $\rightarrow$ function x $\rightarrow$ f (f x)) =  ......     }
+                    {$\frac{  \cfrac{ \cfrac{\text{fresh } F}{ \text{fresh } X{_4},\text{ tinfer}(\{ f=X{_0}, x=X{_1} \},f) = \{ F, \{ F=X{_0} \} \}} ,\qquad  \frac{\text{fresh} X{_2},  \text{tinfer}(\{ f:X{_0}, x:X{_1}\}, f) = ( F, \{ F=X{_0}\}) \qquad \frac{\text{fresh} X }{\text{infer}(\{ f:X{_0}, x:X{_1}  \}, x) = ( X, \{X=X{_1})}  }{  \text{tinfer}(\{ F=X{_0}, X=X{_1}\}, \text{f x}) = (X{_2}, \{F=X{_0}, X=X{_1}, F = X \rightarrow X{_2}\}) } }{ \text{fresh } X{_1},X{_5}, \text{ tinfer}(\{f=X{_0}, x=X{_1}\}, f (f x) ) = (X{_4},\{ F=X{_0}, X=X{_1}, F= X\rightarrow X{_2}, F =  X{_2} \rightarrow X{_4}\} )}}{ \text{fresh } X{_0},X{_6}, \text{ tinfer}(\{f:X{_0}\}, \text{function x} \rightarrow f (f x)) =  (X{_5},  \{ F=X{_0}, X=X{_1}, F= X\rightarrow X{_2}, F =  X{_2} \rightarrow X{_4},  X{_5}= X{_0} \rightarrow X{_4}  \} )}$}
+                    {tinfer($\emptyset$, function f $\rightarrow$ function x $\rightarrow$ f (f x)) =   $\{ F=X{_0}, X=X{_1}, F= X\rightarrow X{_3}, F =  X{_3} \rightarrow X{_4},  X{_5}= X{_0} \rightarrow X{_4}, X{_6}=X{_0} \rightarrow X{_5} \}$     }
                 \item[(b)]{Sol}
             \end{enumerate}
         \item[(6)]{Sol} \\
