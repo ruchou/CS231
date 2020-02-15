@@ -90,7 +90,14 @@ type 'a tree =
                 \item[(d)]{No}\\ It would violate Progress.
                 if $data$ leaf then $0$ else $1$
             \end{enumerate}
-
+        \item[(6)]{Sol} \\
+            \inferrule{I-left}{tinfer($\Gamma$,s) = (S${_1}$,C${_1}$) \andalso fresh X \andalso fresh S${_r}$}
+            {tinfer($\Gamma$,left s) = (X, C $\cup \{ S{_1} \vee S{_r}  \}$)}
+            \inferrule{I-right}{tinfer($\Gamma$,s) = (S${_1}$, C${_1}$) \andalso fresh X \andalso fresh S${_l}$}
+            {tinfer($\Gamma$,right s) = (X, C $\cup \{ S{_l} \vee S{_1} \}$)}
+            \inferrule{I-match}
+            {fresh x${_1}$, x${_2}$ \andalso tinfer($\Gamma$,s) = (S, C) \andalso tinfer($\{ \Gamma, x{_1}:X{_1} \} , s_{_1}$) = $(S{_1}, C{_1})$ \andalso tinfer($\{\Gamma, x{_2}:X{_2}\},s_{2}$) = ($S{_2},C{_2}$)}
+            {tinfer($\Gamma$,match s with left s${_1}$ $\rightarrow$ s${_1}$ $|$ right x${_2}$ $\rightarrow$ s${_2}$)} = $(X, C \cup C{_2} \cup C{_3} \cup \{ S{_1} = S{_2}, S = S{_1} \vee S{_2} \} )$
     \end{description}
 
 %    \section{Language of Booleans and Integers}
