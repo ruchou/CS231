@@ -23,3 +23,13 @@ let f pair =
     match snd pair with
         Left x1 -> (fst pair) x1
         |Right x2 -> x2;;
+
+let f p =
+    match Left p with
+        Left a -> a
+        | Right b -> match p with
+                        Right c -> c
+                        | _ -> b;;
+(*         match p with*)
+(*                        Right c -> c*)
+(*                        |Left a_b -> a_b;;*)
