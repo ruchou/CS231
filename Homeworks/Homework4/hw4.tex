@@ -96,10 +96,13 @@ type 'a tree =
             \begin{enumerate}
                 \item [(a)]{Inference Rules}
                     \inferrule{I-Fun}
-                    {$\frac{  \cfrac{ \cfrac{\text{fresh } F}{ \text{fresh } X{_4},\text{ tinfer}(\{ f=X{_0}, x=X{_1} \},f) = \{ F, \{ F=X{_0} \} \}} ,\qquad  \frac{\text{fresh} X{_2},  \text{tinfer}(\{ f:X{_0}, x:X{_1}\}, f) = ( F, \{ F=X{_0}\}), \frac{\text{fresh} X }{\text{infer}(\{ f:X{_0}, x:X{_1}  \}, x) = ( X, \{X=X{_1})}  }{  \text{tinfer}(\{ F=X{_0}, X=X{_1}\}, \text{f x}) = (X{_2}, \{F=X{_0}, X=X{_1}, F = X \rightarrow X{_2}\}) } }{ \text{fresh } X{_1},X{_5}, \text{ tinfer}(\{f=X{_0}, x=X{_1}\}, f (f x) ) = (X{_4},\{ F=X{_0}, X=X{_1}, F= X\rightarrow X{_2}, F =  X{_2} \rightarrow X{_4}\} )}}{ \text{fresh } X{_0},X{_6}, \text{ tinfer}(\{f:X{_0}\}, \text{function x} \rightarrow f (f x)) =  (X{_5},  \{ F=X{_0}, X=X{_1}, F= X\rightarrow X{_2}, F =  X{_2} \rightarrow X{_4},  X{_5}= X{_0} \rightarrow X{_4}  \} )}$}
-                    {tinfer($\emptyset$, \text{function} f $\rightarrow$ \text{function} x $\rightarrow$ f(fx)) = ($X{_6}$, C )}
-                    $ C = \{ F=X{_0}, X=X{_1}, F= X\rightarrow X{_2}, F =  X{_2} \rightarrow X{_4},  X{_5}= X{_0} \rightarrow X{_4}, X{_6}=X{_0}\rightarrow X{_5} \}$ \\
-                \item[(b)]{Sol}
+                    {$\frac{  \cfrac{ \cfrac{\text{fresh } F}{ \text{fresh } X{_3},\text{ tinfer}(\{ f=X{_0}, x=X{_1} \},f) = \{ F, \{ F=X{_0} \} \}} ,\qquad  \frac{\text{fresh} X{_2},  \text{tinfer}(\{ f:X{_0}, x:X{_1}\}, f) = ( F, \{ F=X{_0}\}), \frac{\text{fresh} X }{\text{infer}(\{ f:X{_0}, x:X{_1}  \}, x) = ( X, \{X=X{_1})}  }{  \text{tinfer}(\{ F=X{_0}, X=X{_1}\}, \text{f x}) = (X{_2}, \{F=X{_0}, X=X{_1}, F = X \rightarrow X{_2}\}) } }{ \text{fresh } X{_1},X{_4}, \text{ tinfer}(\{f=X{_0}, x=X{_1}\}, f (f x) ) = (X{_3},\{ F=X{_0}, X=X{_1}, F= X\rightarrow X{_2}, F =  X{_2} \rightarrow X{_3}\} )}}{ \text{fresh } X{_0},X{_5}, \text{ tinfer}(\{f:X{_0}\}, \text{function x} \rightarrow f (f x)) =  (X{_4},  \{ F=X{_0}, X=X{_1}, F= X\rightarrow X{_2}, F =  X{_2} \rightarrow X{_3},  X{_4}= X{_1} \rightarrow X{_3}  \} )}$}
+                    {tinfer($\emptyset$, \text{function} f $\rightarrow$ \text{function} x $\rightarrow$ f(fx)) = ($X{_5}$, C )}
+                    $ C = \{ F=X{_0}, X=X{_1}, F= X\rightarrow X{_2}, F =  X{_2} \rightarrow X{_3},  X{_4}= X{_1} \rightarrow X{_3} X{_5}= X{_0} \rightarrow X{_4} \}$ \\
+                \item[(b)]{Sol}\\
+                    $[ F \vdash X \rightarrow X, X \vdash X, X{_2} \vdash X, X{_3} \vdash X, X{_4} \vdash X \rightarrow X, X{_5} \vdash X \rightarrow (X \rightarrow X)]$\\
+                    So, f could have the type $X \rightarrow X$, and the x could have the type $X$
+
             \end{enumerate}
         \item[(6)]{Sol} \\
             \inferrule{I-left}{tinfer($\Gamma$,s) = (S${_1}$,C${_1}$) \andalso fresh X \andalso fresh S${_r}$}
@@ -161,3 +164,8 @@ type 'a tree =
 
 
 \end{document}
+
+
+%F = X0,X = X1,F = X → X2,F = X2 → X4,X5 = X0 → X4,X6 = X0 → X5
+%
+%(F=X0, X = X1; F= X -> X2; F = X2 -> X4 ; X5 = X0 -> X4; X6 = X0 -> X5  )

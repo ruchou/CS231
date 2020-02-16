@@ -103,3 +103,6 @@ Completeness of Type Inference
 
     If {} |- t:T and s = erase(t),
     then tinfer({},s) = ( S,C ) and there exists sigma  that satisfies C s.t. sigma(S) = T
+
+
+    (F=X2->X4).
