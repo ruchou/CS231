@@ -100,8 +100,8 @@ type 'a tree =
                     {tinfer($\emptyset$, \text{function} f $\rightarrow$ \text{function} x $\rightarrow$ f(fx)) = ($X{_5}$, C )}
                     $ C = \{ F=X{_0}, X=X{_1}, F= X\rightarrow X{_2}, F =  X{_2} \rightarrow X{_3},  X{_4}= X{_1} \rightarrow X{_3}, X{_5}= X{_0} \rightarrow X{_4} \}$ \\
                 \item[(b)]{Sol}\\
-                    $[ F \mapsto(T \rightarrow T),X \mapsto T, X{_0} \mapsto T, X{_1} \mapsto T, X{_2} \mapsto T, X{_3} \mapsto T, X{_4} \mapsto(T \rightarrow T), X{_5} \mapsto (T \rightarrow T) \rightarrow (T \rightarrow T)]$\\
-                    So, f could have the type $T \rightarrow T$, and the x could have the type $T$
+                    $[ F \mapsto(X \rightarrow X), X{_0} \mapsto (X \rightarrow X), X{_1} \mapsto X, X{_2} \mapsto X, X{_3} \mapsto X, X{_4} \mapsto(X \rightarrow X), X{_5} \mapsto (X \rightarrow X) \rightarrow (X \rightarrow X)]$\\
+                    So, f could have the type $X \rightarrow X$, and the x could have the type $X$
 
             \end{enumerate}
         \item[(6)]{Sol} \\

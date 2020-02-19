@@ -1,0 +1,64 @@
+Let Polymorphism
+
+//prolog
+x = arrow(Y,Z) Z= Y.
+
+Unification produces *most general unifiers
+
+A substitution sigma is a most general unifier of some set set of type equality constraints C if:
+    * sigma satisfies C
+    * For all sigma' that satisfies C, there exists sigma'' s.t. sigma' = sigma o sigma''
+
+------------------I-Var
+tinfer({x:X},x) = (X1,{X1=X})
+--------------------------------- I-Fun
+tinfer({},function x -> x) = (X2,{X1=X,X2 =X -> X1})
+
+//prolog solver
+
+X1=X, X2= arrow(X,X1).
+
+
+Parametric Polymorphism
+
+...
+
+tinfer(G,s1) = (S1,C1)
+tinfer(G U {x:S1},s2) = (S2,C2)
+fresh X
+-------------------------------------I-let
+tinfer(G,let x = s1 in s2) = (X, C1 U C2 U (X=S2))
+
+
+
+one (sort of ) solution:
+
+tinfer(G U s2[ x |-> s1]) = (S2,C2)
+fresh X
+-------------------------------------I-let
+tinfer(G,let x = s1 in s2) = (X, C1 U C2 U (X=S2))
+
+sor of works, because we replace variable uses with a re-definition of the function. But:
+    -inefficient
+    -unsound if x does not occur in s2
+    -changes behavior if s 2 has side effect
+
+Instead, what Ocaml does is (Hindley-Milner type inference):
+- use the original rule for let above
+- universally quantify any type variables in the resulting type
+- replace universally quantified type variables with fresh type variables at every use
+
+second order logic first order logic
+formal parameter
+
+Why only let-bound variables ? Consider:
+
+function id -> (id 3, id "hi")
+
+If I give this function type (X->X ) -> (Int * String), that means:
+
+forall X. ((X->X) -> (Int * String))
+
+What would be a correct type for this function ?
+
+(forall X. (X->X)) -> (Int * String)
