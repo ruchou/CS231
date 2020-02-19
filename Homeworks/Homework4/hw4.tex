@@ -25,7 +25,7 @@
 
 \author{Yan-Ru Jhou, Nurrachman Liu}
 
-\date{Feb 14th, 2020}
+\date{Feb 18th, 2020}
 
 \begin{document}
 
@@ -35,13 +35,13 @@
         \item[1]{Sol}\\
             \begin{enumerate}
                 \item[(a)] { $((A \wedge B) \wedge C) \rightarrow ( A \wedge ( B \wedge C) )$}\\
-                    $ \text{function}\, p:((A \wedge B) \wedge C) \rightarrow ( (fst\,(fst\,p))\; , \; (snd\,(fst\,p) , snd\, p) ) $
+                    $ \text{function}\, p:((A \wedge B) \wedge C) \rightarrow ( (fst\,(fst\,p))\; , \; (fst\,(snd\,p) , snd\, p) ) $
                 \item[(b)] {$((A \vee B)\; \vee \; (C))  \rightarrow ( A \; \vee \; (B \vee C))$ }\\
-                    $\text{function}\, p:(A \vee B)\; \vee \; (C))  \longrightarrow  \text{match } \text{Left } p \text{ with} \\ \text{Left } a \rightarrow \\ | \text{Right } b \rightarrow \text{match } p \text{ with} \\ ~~~~~\text{Right } c \rightarrow c \\  ~~~~~|\text{\_} \rightarrow b $
+                    $\text{function}\, p:(A \vee B)\; \vee \; (C))  \longrightarrow  \text{match } \text{left } p \text{ with} \\ \text{left } a \rightarrow \text{left } a \\ | \text{right } b \rightarrow \text{match } p \text{ with} \\ ~~~~~\text{right } c \rightarrow c \\  ~~~~~|\text{\_} \rightarrow b $
                 \item[(c)]{$((A \; \vee B) \longrightarrow C)$}\\
-                    $\text{function}\, p:((A \; \vee B) \rightarrow C) \longrightarrow (\text{function a:A} \rightarrow p \, a \; \wedge\; \text{function b:B}\rightarrow p \, b )$
-                \item[(c)] {$(A \rightarrow B) \longrightarrow (\neg A \rightarrow \neg B)$}
-                    $\text{function f:}(B \rightarrow false) \longrightarrow \text{function a:A} \longrightarrow f\: (p\: a)$
+                    $\text{function}\, p:((A \; \vee B) \rightarrow C) \longrightarrow (\text{function a:A} \rightarrow p \, a \; , \; \text{function b:B}\rightarrow p \, b )$
+                \item[(c)] {$(A \rightarrow B) \longrightarrow (\neg B \rightarrow \neg A)$}\\
+                    $\text{function}\,p:(A \rightarrow B ) \longrightarrow \text{function f:}(B \rightarrow false) \longrightarrow (\text{function a:A} \longrightarrow f\: (p\: a))$
             \end{enumerate}
         \item [2]{Sol}
             \begin{enumerate}
@@ -49,12 +49,12 @@
                     \inferax{E-While}{\step{while t${_1}$ do t${_2}$}{if t${_1}$ then t${_2}$;while t${_1}$ do t${_2}$ else t${_2}$}}
                 \item[(b)]{Typing Rule} \\
                 \inferrule{T-While}{$\Gamma \vdash t_1 : bool$ \andalso $\Gamma \vdash t_2:T$ }
-                {while t${_1}$ do t${_2}$: True}
+                {$\Gamma \vdash$ while t${_1}$ do t${_2}$: True}
             \end{enumerate}
         \item[3]{Sol}
             \begin{enumerate}
                 \item [(a)]{WhileFun}\\
-                    $\text{letrec}\: whileFun = \\ \text{function }t{_1}:(True \rightarrow Bool) \longrightarrow \text{function }t{_2}:(True -> True) \\ in \, \text{if } t_1 \; \text{then } t_2; whileFun \;\; t_1\,t_2 \text{else} ()$
+                    $\text{letrec}\: whileFun = \\ \text{function }t{_1}:(True \rightarrow Bool) \longrightarrow \text{function }t{_2}:(True -> True)  \text{ in}\\ \, \text{if } t_1 \; \text{then } t_2; whileFun \;\; t_1\,t_2 \text{ else} ()$
             \end{enumerate}
         \item[(4)]{Sol}
             \begin{enumerate}
@@ -89,7 +89,7 @@ type 'a tree =
 | Leaf
 | Node of 'a * 'a tree * 'a tree
                     \end{lstlisting}
-                \item[(d)]{No}\\ It would violate Progress.
+                \item[(d)]{No}\\ It would violate Progress. \\ For example:
                 if $data$ leaf then $0$ else $1$
             \end{enumerate}
         \item[(5)]{Sol}
@@ -106,12 +106,12 @@ type 'a tree =
             \end{enumerate}
         \item[(6)]{Sol} \\
             \inferrule{I-left}{tinfer($\Gamma$,s) = (S${_1}$,C${_1}$) \andalso fresh X \andalso fresh S${_r}$}
-            {tinfer($\Gamma$,left s) = (X, C $\cup \{ S{_1} \vee S{_r}  \}$)}
+            {tinfer($\Gamma$,left s) = (X, C $\cup \{ X=S{_1} \vee S{_r}  \}$)}
             \inferrule{I-right}{tinfer($\Gamma$,s) = (S${_1}$, C${_1}$) \andalso fresh X \andalso fresh S${_l}$}
-            {tinfer($\Gamma$,right s) = (X, C $\cup \{ S{_l} \vee S{_1} \}$)}
+            {tinfer($\Gamma$,right s) = (X, C $\cup \{ X=S{_l} \vee S{_1} \}$)}
             \inferrule{I-match}
-            {fresh x${_1}$, x${_2}$ \andalso tinfer($\Gamma$,s) = (S, C) \andalso tinfer($\{ \Gamma, x{_1}:X{_1} \} , s_{_1}$) = $(S{_1}, C{_1})$ \andalso tinfer($\{\Gamma, x{_2}:X{_2}\},s_{2}$) = ($S{_2},C{_2}$)}
-            {tinfer($\Gamma$,match s with left s${_1}$ $\rightarrow$ s${_1}$ $|$ right x${_2}$ $\rightarrow$ s${_2}$)} = $(X, C \cup C{_2} \cup C{_3} \cup \{ S{_1} = S{_2}, S = S{_1} \vee S{_2} \} )$
+            {fresh X${_1}$, X${_2}$ \andalso tinfer($\Gamma$,s) = (S, C) \andalso tinfer($\{ \Gamma, x{_1}:X{_1} \} , s_{_1}$) = $(S{_1}, C{_1})$ \andalso tinfer($\{\Gamma, x{_2}:X{_2}\},s_{2}$) = ($S{_2},C{_2}$)}
+            {tinfer($\Gamma$,match s with left x${_1}$ $\rightarrow$ s${_1}$ $|$ right x${_2}$ $\rightarrow$ t${_2}$)} = $(X, C \cup C{_2} \cup C{_3} \cup \{ S{_1} = S{_2}, S = S{_1} \vee S{_2} \} )$
     \end{description}
 
 %    \section{Language of Booleans and Integers}
