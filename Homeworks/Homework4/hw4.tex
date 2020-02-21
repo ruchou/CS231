@@ -109,10 +109,9 @@ type 'a tree =
             {tinfer($\Gamma$,left s) = (X, C $\cup \{ X=S{_1} \vee S{_r}  \}$)}
             \inferrule{I-right}{tinfer($\Gamma$,s) = (S${_1}$, C) \andalso fresh X \andalso fresh S${_l}$}
             {tinfer($\Gamma$,right s) = (X, C $\cup \{ X=S{_l} \vee S{_1} \}$)}
-            $\frac{}{\text{infer}(\Gamma,)}$
             \inferrule{I-match}
-            {fresh X${_1}$, X${_2}$ \andalso tinfer($\Gamma$,s) = (S, C) \andalso tinfer($\Gamma , \text{left } x{_1} = C{_l})$ \andalso tinfer($\Gamma , \text{right } x{_2} = C{_r})$  \andalso tinfer($\{ \Gamma, x{_1}:X{_1} \} , s_{_1}$) = $(S{_1}, C{_1})$ \andalso tinfer($\{\Gamma, x{_2}:X{_2}\},s_{2}$) = ($S{_2},C{_2}$)}
-            {tinfer($\Gamma$,match s with left x${_1}$ $\rightarrow$ s${_1}$ $|$ right x${_2}$ $\rightarrow$ s${_2}$)} = $(X, C \cup C{_1} \cup C{_2} \cup \{ S{_1} = S{_2}, S = S{_1} \vee S{_2} \} )$
+            {fresh X, X${_1}$, X${_2}$ \andalso tinfer($\Gamma$,s) = (S, C)  \andalso tinfer($\{ \Gamma, x{_1}:X{_1} \} , s_{_1}$) = $(S{_1}, C{_1})$ \andalso tinfer($\{\Gamma, x{_2}:X{_2}\},s_{2}$) = ($S{_2},C{_2}$)}
+            {tinfer($\Gamma$,match s with left x${_1}$ $\rightarrow$ s${_1}$ $|$ right x${_2}$ $\rightarrow$ s${_2}$)} = $(X, C \cup C{_1} \cup C{_2} \cup \{ S{_1} = S{_2}, S = X{_1} \vee X{_2} \} )$
     \end{description}
 
 %    \section{Language of Booleans and Integers}
