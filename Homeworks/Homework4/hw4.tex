@@ -38,7 +38,7 @@
                     $ \text{function}\, p:((A \wedge B) \wedge C) \rightarrow ( (fst\,(fst\:p))\; , \; (snd\,(fst\:p) , snd\, p) ) $
                 \item[(b)] {$((A \vee B)\; \vee \; (C))  \rightarrow ( A \; \vee \; (B \vee C))$ }\\
                     $\text{function}\, p:(A \vee B)\; \vee \; (C))  \longrightarrow  \text{match } \text{left } p \text{ with} \\ \text{left } a \rightarrow \text{left } a \\ | \text{right } b \rightarrow \text{match } p \text{ with} \\ ~~~~~\text{right } c \rightarrow c \\  ~~~~~|\text{\_} \rightarrow b $
-                \item[(c)]{$((A \; \vee B) \longrightarrow C)$}\\
+                \item[(c)]{$((A \; \vee B) \longrightarrow C) \rightarrow (A \rightarrow C) \wedge (B \rightarrow C) $}\\
                     $\text{function}\, p:((A \; \vee B) \rightarrow C) \longrightarrow (\text{function a:A} \rightarrow p \, a \; , \; \text{function b:B}\rightarrow p \, b )$
                 \item[(d)] {$(A \rightarrow B) \longrightarrow (\neg B \rightarrow \neg A)$}\\
                     $\text{function}\,p:(A \rightarrow B ) \longrightarrow \text{function f:}(B \rightarrow false) \longrightarrow (\text{function a:A} \longrightarrow f\: (p\: a))$
@@ -64,24 +64,24 @@
                     \inferrule{E-Node2}{\step{t${_2}$}{t$_2'$}}
                     {\step{node(tv$_1$,t${_2}$,t${_3}$) }{node(tv${_1}$,t${_2'}$,t${_3}$)}}
                     \inferrule{E-Node3}{\step{t${_3}$}{t$_3'$}}
-                    {\step{node(tv$_1$,t${_2}$,t${_3}$) }{node(tv${_1}$,t${_2}$,t${_3'}$)}}
+                    {\step{node(tv$_1$,v${_2}$,t${_3}$) }{node(tv${_1}$,v${_2}$,t${_3'}$)}}
                     \inferrule{E-LeftTree}{\step{t$$}{t$'$}}
                     {\step{leftTree t }{leftTree t${'}$}}
                     \inferax{E-LeftTreeRed}{\step{leftTree Node(tv${_1}$,v${_2}$,tv${_3}$)}{tv${_1}$}}
                     \inferrule{E-RightTree}{\step{t$$}{t$'$}}
-                    {\step{RightTree t }{RightTree t${'}$}}
+                    {\step{rightTree t }{rightTree t${'}$}}
                     \inferax{E-RightTreeRed}{\step{rightTree Node(tv${_1}$,v${_2}$,tv${_3}$)}{tv${_3}$}}
                     \inferrule{E-data1}{\step{t$$}{t$'$}}
                     {\step{data t }{data t${'}$}}
-                    \inferax{E-dataRed}{\step{data node(tv${_1}$,t${_2}$,tv${_3}$)}{t${_2}$}}
+                    \inferax{E-dataRed}{\step{data node(tv${_1}$,v${_2}$,tv${_3}$)}{v${_2}$}}
                 \item[(b)]{Typing Rules}\\
                     \inferax{T-leaf}{$\Gamma \vdash \text{leaf}:False \, \text{Tree}$}
                     \inferrule{T-Node}{$\Gamma \vdash t_1: \text{T Tree}$ \andalso $\Gamma \vdash t_2: T$ \andalso $\Gamma \vdash t_3:\text{T Tree}$ }{$\Gamma \vdash\ node(t_1,t_2,t_3): \text{T Tree} $}
                     \inferrule{T-leftTree}{$\Gamma \vdash t: \text{T Tree}$}{$\Gamma \vdash \text{leftTree}\, t: \text{T Tree}$}
                     \inferrule{T-rightTree}{$\Gamma \vdash t: \text{T Tree}$}{$\Gamma \vdash \text{rightTree}\, t: \text{T Tree}$}
-                    \inferrule{T-Data}{ $\Gamma \vdash$ v${_2}$:T}{$\Gamma \vdash$ node(tv${_1}$,v${_2}$,tv${_3}$): T Tree}
+                    \inferrule{T-Data}{ $\Gamma \vdash$ v${_2}$:T}{$\Gamma \vdash$ data node(tv${_1}$,v${_2}$,tv${_3}$): T}
                 \item[(c)]{Sol}\\
-                    The typechecker needs to guess types since we allow leaf to be have type false.\\
+                    The typechecker needs to guess types since we allow leaf to be have type false Tree.\\
                     We could define the tree type as Tree = leaf \textbar node(t1,t2,t3).
                     For example, in ocaml
                     \begin{lstlisting}[language=Caml]
@@ -105,13 +105,14 @@ type 'a tree =
 
             \end{enumerate}
         \item[(6)]{Sol} \\
-            \inferrule{I-left}{tinfer($\Gamma$,s) = (S${_1}$,C${_1}$) \andalso fresh X \andalso fresh S${_r}$}
+            \inferrule{I-left}{tinfer($\Gamma$,s) = (S${_1}$,C) \andalso fresh X \andalso fresh S${_r}$}
             {tinfer($\Gamma$,left s) = (X, C $\cup \{ X=S{_1} \vee S{_r}  \}$)}
-            \inferrule{I-right}{tinfer($\Gamma$,s) = (S${_1}$, C${_1}$) \andalso fresh X \andalso fresh S${_l}$}
+            \inferrule{I-right}{tinfer($\Gamma$,s) = (S${_1}$, C) \andalso fresh X \andalso fresh S${_l}$}
             {tinfer($\Gamma$,right s) = (X, C $\cup \{ X=S{_l} \vee S{_1} \}$)}
+            $\frac{}{\text{infer}(\Gamma,)}$
             \inferrule{I-match}
-            {fresh X${_1}$, X${_2}$ \andalso tinfer($\Gamma$,s) = (S, C) \andalso tinfer($\{ \Gamma, x{_1}:X{_1} \} , s_{_1}$) = $(S{_1}, C{_1})$ \andalso tinfer($\{\Gamma, x{_2}:X{_2}\},s_{2}$) = ($S{_2},C{_2}$)}
-            {tinfer($\Gamma$,match s with left x${_1}$ $\rightarrow$ s${_1}$ $|$ right x${_2}$ $\rightarrow$ t${_2}$)} = $(X, C \cup C{_2} \cup C{_3} \cup \{ S{_1} = S{_2}, S = S{_1} \vee S{_2} \} )$
+            {fresh X${_1}$, X${_2}$ \andalso tinfer($\Gamma$,s) = (S, C) \andalso tinfer($\Gamma , \text{left } x{_1} = C{_l})$ \andalso tinfer($\Gamma , \text{right } x{_2} = C{_r})$  \andalso tinfer($\{ \Gamma, x{_1}:X{_1} \} , s_{_1}$) = $(S{_1}, C{_1})$ \andalso tinfer($\{\Gamma, x{_2}:X{_2}\},s_{2}$) = ($S{_2},C{_2}$)}
+            {tinfer($\Gamma$,match s with left x${_1}$ $\rightarrow$ s${_1}$ $|$ right x${_2}$ $\rightarrow$ s${_2}$)} = $(X, C \cup C{_1} \cup C{_2} \cup \{ S{_1} = S{_2}, S = S{_1} \vee S{_2} \} )$
     \end{description}
 
 %    \section{Language of Booleans and Integers}
