@@ -35,12 +35,12 @@
         \item[1]{Sol}\\
             \begin{enumerate}
                 \item[(a)] { $((A \wedge B) \wedge C) \rightarrow ( A \wedge ( B \wedge C) )$}\\
-                    $ \text{function}\, p:((A \wedge B) \wedge C) \rightarrow ( (fst\,(fst\,p))\; , \; (fst\,(snd\,p) , snd\, p) ) $
+                    $ \text{function}\, p:((A \wedge B) \wedge C) \rightarrow ( (fst\,(fst\:p))\; , \; (snd\,(fst\:p) , snd\, p) ) $
                 \item[(b)] {$((A \vee B)\; \vee \; (C))  \rightarrow ( A \; \vee \; (B \vee C))$ }\\
                     $\text{function}\, p:(A \vee B)\; \vee \; (C))  \longrightarrow  \text{match } \text{left } p \text{ with} \\ \text{left } a \rightarrow \text{left } a \\ | \text{right } b \rightarrow \text{match } p \text{ with} \\ ~~~~~\text{right } c \rightarrow c \\  ~~~~~|\text{\_} \rightarrow b $
                 \item[(c)]{$((A \; \vee B) \longrightarrow C)$}\\
                     $\text{function}\, p:((A \; \vee B) \rightarrow C) \longrightarrow (\text{function a:A} \rightarrow p \, a \; , \; \text{function b:B}\rightarrow p \, b )$
-                \item[(c)] {$(A \rightarrow B) \longrightarrow (\neg B \rightarrow \neg A)$}\\
+                \item[(d)] {$(A \rightarrow B) \longrightarrow (\neg B \rightarrow \neg A)$}\\
                     $\text{function}\,p:(A \rightarrow B ) \longrightarrow \text{function f:}(B \rightarrow false) \longrightarrow (\text{function a:A} \longrightarrow f\: (p\: a))$
             \end{enumerate}
         \item [2]{Sol}
