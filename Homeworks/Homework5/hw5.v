@@ -23,13 +23,21 @@ Fixpoint plus (n1 n2 : nat) : nat :=
 
 Lemma plus_succ_right : forall n1 n2, 
   succ (plus n1 n2) = plus n1 (succ n2).
-Admitted.
+Proof.
+  intros n. intros m. induction n as [|n'].
+  - simpl. reflexivity.
+  - simpl. rewrite IHn'. reflexivity.
+Qed.
+
 
 (* PROBLEM 2a: Define the following function, which doubles the given natural number.  Don't call any helper functions; instead directly define the function recursively. Some example tests are shown below.  Remove "Admitted." and fill in the body of the double function before the period.
 *)
 
-Fixpoint double (n : nat) : nat
-. Admitted.
+Fixpoint double (n : nat) : nat :=
+  match n with
+    zero => zero
+    |succ n' => plus (succ n') (succ n')
+  end.
 
 Definition one := succ zero.
 Definition two := succ one.
@@ -38,22 +46,30 @@ Definition four := succ three.
 
 (* After defining double above, you should be able to remove "Admitted." below, uncomment the proofs, and everything should work without errors. *)
 Example doubleZero : double zero = zero.
-Admitted.
-(* Proof. reflexivity. Qed. *)
-
+Proof.
+  reflexivity.
+Qed.
 Example doubleOne : double one = two.
-Admitted.
-(* Proof. reflexivity. Qed. *)
+Proof.
+  reflexivity.
+Qed.
 
 Example doubleTwo : double two = four.
-Admitted.
+Proof.
+  reflexivity.
+Qed.
 (* Proof. reflexivity. Qed. *)
 
 (* PROBLEM 2b: Prove the following lemma about doubling and addition. HINT: Your proof will make use of the lemma you proved in Problem 1 above. Remove "Admitted." and replace it with your proof. *)
 
 Lemma doublePlus : 
   forall n, (double n) = (plus n n).
-Admitted.
+Proof.
+  intros. 
+  destruct n.
+  - simpl. reflexivity.
+  - simpl. reflexivity.
+Qed.
 
 (* PROBLEM 3a: Complete the definition of the proposition leq below such that (leq n m) is provable if and only if n <= m, where n and m are of type nat.  Don't make any helper functions or types.  *)
 
