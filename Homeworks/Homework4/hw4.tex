@@ -54,7 +54,7 @@
         \item[3]{Sol}
             \begin{enumerate}
                 \item [(a)]{WhileFun}\\
-                    $\text{letrec}\: whileFun = \\ \text{function }t{_1}:(True \rightarrow Bool) \longrightarrow \text{function }t{_2}:(True -> True)  \text{ in}\\ \, \text{if } t_1 \; \text{then } t_2; whileFun \;\; t_1\,t_2 \text{ else} ()$
+                    $\text{letrec}\: whileFun = \\ \text{function }x:(Unit \rightarrow True) \longrightarrow \text{function }x:(Unit \rightarrow Unit) \longrightarrow while t{_1} \, t{_2}  \text{ in}\\ \, whileFun\, t_{1}\:\: t{_2}$
             \end{enumerate}
         \item[(4)]{Sol}
             \begin{enumerate}
