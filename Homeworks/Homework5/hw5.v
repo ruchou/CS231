@@ -1,5 +1,5 @@
 (* Homework 5 *)
-
+(*Yan-Ru Jhou and Nurrachman Liu*)
 (* Due by the end of the day on March 3.  Just turn in this file. *)
 
 (* Here are the type definitions for booleans and natural numbers,
@@ -74,18 +74,26 @@ Qed.
 (* PROBLEM 3a: Complete the definition of the proposition leq below such that (leq n m) is provable if and only if n <= m, where n and m are of type nat.  Don't make any helper functions or types.  *)
 
 Inductive leq : nat -> nat -> Prop :=
+  LeqZero: forall n, leq zero n
+  |LeqS: forall n1 n2, leq n1 n2 -> leq (succ n1) (succ n2)
 . 
 
 (* PROBLEM 3b: Build a derivation of the proposition (leq two four). Remove "Admitted." and provide the definition of two_leq_four. *)
 
-Example two_leq_four : leq two four. Admitted.
-
+Example two_leq_four : leq two four.
+Proof.
+  apply LeqS. apply LeqS. apply LeqZero.
+Qed.
 (* PROBLEM 3c:  Prove this lemma about leq
 and plus. Remove "Admitted." and replace it with your proof. *)    
 
 Lemma leq_plus : forall n1 n2,
   leq n1 (plus n1 n2).
-Admitted.
+Proof.
+  intros n1 n2 . induction n1 as [|n1'].
+  -simpl. apply LeqZero.
+  -simpl. apply LeqS. assumption.
+Qed.
 
 (* PROBLEM 4: CS231 All Over Again *)
 
@@ -97,13 +105,16 @@ Inductive term : Type :=
 | t_unit : term
 | t_true : term
 | t_false : term
-| t_if : term -> term -> term -> term.
+| t_if : term -> term -> term -> term
+| t_num : nat -> term
+| t_plus : term -> term -> term.
 
 (* Problem 4b: Add the type Nat for natural numbers to our definition of types below. *)
 
 Inductive ty : Type :=
 | Unit : ty
-| Bool : ty.
+| Bool : ty
+| Nat : ty.
 
 (* Problem 4c: Add typing rules for your new terms. *)
 
@@ -111,7 +122,10 @@ Inductive typeof : term -> ty -> Prop :=
 | tcUnit : typeof t_unit Unit
 | tcTrue : typeof t_true Bool
 | tcFalse : typeof t_false Bool
-| tcIf : forall t1 t2 t3 T, typeof t1 Bool -> typeof t2 T -> typeof t3 T -> typeof (t_if t1 t2 t3) T.
+| tcIf : forall t1 t2 t3 T, typeof t1 Bool -> typeof t2 T -> typeof t3 T -> typeof (t_if t1 t2 t3) T
+| tcNum: forall n, typeof (t_num n) Nat
+| tcPlus: forall t1 t2, typeof t1 Nat -> typeof t2 Nat -> typeof (t_plus t1 t2) Nat.
+
 
 
 Notation "t : T" := (typeof t T) (at level 40). 
@@ -121,7 +135,8 @@ Notation "t : T" := (typeof t T) (at level 40).
 Inductive isValue : term -> Prop :=
 | unitVal : isValue t_unit
 | trueVal : isValue t_true
-| falseVal : isValue t_false.
+| falseVal : isValue t_false
+| numVal: forall n, isValue (t_num n). 
 
 (* Problem 4e: Add the operational semantics for your new terms, using the same semantics that we've done previously for integer terms. *)
 
@@ -130,7 +145,14 @@ Inductive step : term -> term -> Prop :=
   | stepIfFalse : forall t2 t3, step (t_if t_false t2 t3) t3
   | stepIf :
     forall t1 t1' t2 t3,
-      step t1 t1' -> step (t_if t1 t2 t3) (t_if t1' t2 t3).
+      step t1 t1' -> step (t_if t1 t2 t3) (t_if t1' t2 t3)
+  | stepPlus1:
+    forall t1 t1' t2, step t1 t1' -> step (t_plus t1 t2) (t_plus t1' t2)
+  | stepPlus2:
+    forall n1 t2 t2', step t2 t2' -> step (t_plus n1 t2) (t_plus n1 t2')
+  | stepPlusRed:
+    forall n1 n2, step (t_plus (t_num n1) (t_num n2)) ( t_num (plus n1 n2) ).
+
 
 Notation "t1 '-->' t2" := (step t1 t2) (at level 40).
 
@@ -142,7 +164,18 @@ Proof.
   - rewrite <- H1 in H0. inversion H0.
   - left. reflexivity.
   - right. reflexivity.
+  - rewrite <-H1 in H0. inversion H0.
 Qed.
+
+Lemma cfNat: forall v, isValue v -> v : Nat -> exists n, v = t_num n.
+Proof.
+  intros. inversion H.
+  - rewrite <-H1 in H0. inversion H0.
+  - rewrite <-H1 in H0. inversion H0.
+  - rewrite <-H1 in H0. inversion H0.
+  - exists n. reflexivity. 
+Qed.
+
 
 Theorem progress : forall t T, t : T -> isValue t \/ exists t', t --> t'.
 Proof.
@@ -155,6 +188,14 @@ Proof.
       + exists t2. rewrite H3. apply stepIfTrue.
       + exists t3. rewrite H3. apply stepIfFalse.
     * inversion H2. exists (t_if x t2 t3). apply stepIf. apply H3.
+  - left. apply numVal.
+  - right. inversion IHtypeof1.
+    *apply cfNat in H1. inversion H1. inversion IHtypeof2.
+      + apply cfNat in H3. inversion H3. exists (t_num (plus x x0)). rewrite H2. rewrite H4. apply stepPlusRed. apply H0.
+      + inversion H3. inversion H3. exists (t_plus t1 x0). rewrite H2. apply stepPlus2. assumption.
+      + assumption.
+    * inversion H1. exists(t_plus x t2). apply stepPlus1. assumption.
+      
 Qed.
 
 (* Problem 4g: Complete the Preservation proof for your language. *)
@@ -172,4 +213,9 @@ Proof.
       + apply IHtypeof1. assumption.
       + assumption.
       + assumption.
-Qed.
+  - intros. inversion H0.
+  - intros. inversion H1.
+    * apply tcPlus. apply IHtypeof1. assumption. assumption.
+    * apply tcPlus. assumption. apply IHtypeof2. assumption.
+    * apply tcNum.
+ Qed.
