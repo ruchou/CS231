@@ -1,0 +1,20 @@
+Mutable references
+
+t ::= ...| ref t | !t | t := t
+v ::= ... | ref v( wrong we cannot tell the difference: x = ref 10 , y = x )
+T ::= ... | Ref T
+
+Type System:
+
+G |- t : T
+--------------------------- T-Ref
+G |- ref t: Ref T
+
+G |- t : Ref T
+------------------------T-Deref
+G |- !t: T
+
+G |- t1 : Ref T
+G |- t2 : T
+--------------------------T-Asgn
+G |- t1:= t2 : Unit
