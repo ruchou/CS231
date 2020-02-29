@@ -80,10 +80,17 @@ Inductive leq : nat -> nat -> Prop :=
 
 (* PROBLEM 3b: Build a derivation of the proposition (leq two four). Remove "Admitted." and provide the definition of two_leq_four. *)
 
+Example two_leq_four : leq two four := LeqS one three (LeqS zero two (LeqZero two)).
+
+(*
 Example two_leq_four : leq two four.
 Proof.
   apply LeqS. apply LeqS. apply LeqZero.
 Qed.
+Print TEST.
+*)
+
+
 (* PROBLEM 3c:  Prove this lemma about leq
 and plus. Remove "Admitted." and replace it with your proof. *)    
 
