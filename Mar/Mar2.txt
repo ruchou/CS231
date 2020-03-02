@@ -1,0 +1,103 @@
+Mutable References
+
+Chapter 13 of the Pierce book
+
+
+t ::= ... | ref t 		(* allocate a new memory cell, whose value is initialized to the value of t *)
+		  | !t 			(* retrieve the contents of a memory cell *)
+		  | t := t 		(* update the contents of a memory cell to a new value *)
+
+T ::= ... | Ref T
+
+
+Type System:
+
+G |- t : T
+--------------------- T-Ref
+G |- ref t : Ref T
+
+
+G |- t : Ref T
+---------------------- T-Deref
+G |- !t : T
+
+
+G |- t1 : Ref T
+G |- t2 : T
+---------------------- T-Asgn
+G |- t1 := t2 : Unit
+
+
+What are the values of type Ref T?
+
+v ::= true | false | n  | function x:T  -> t  | ....
+
+How about ref v?
+
+let x = ref 0 in
+    let y = ref 0 in
+        let _ = x:= 1 in
+            !y
+--->
+
+
+let y = ref 0 in
+    let _ = (ref 0) := 1 in
+        !y
+
+--->
+let _ =  (ref 0 ):= 1 in
+    !(ref 0)
+
+--->
+let _ = (ref 1) in
+    !(ref 0)
+
+--->* 0
+
+
+We will introduce an infinite set of memory locations, denoted l.
+
+v ::= ... | l
+
+
+New operational semantics judgement of the forms:
+
+<t,mu> ---> <t',mu'>
+
+where us is a heap (store/memory):
+    finite map from locations l to their values v
+
+
+<t, mu> --> <t',mu'>
+------------------------------- E-Ref
+<ref t, mu> --> <ref t', mu'>
+
+fresh l
+--------------------------E-Ref
+<ref v,mu> ---> <l,mu U {(l,v)}>
+
+
+
+<t, mu> --> <t',mu'>
+------------------------------- E-Deref
+<!t, mu> --> <!t', mu'>
+
+
+mu(l) = v
+------------------------------- E-DerefRed
+<!l, mu> --> <v,mu>
+
+
+
+<t1, mu> --> <t1',mu'>
+------------------------------- E-Asgn1
+<t1 := t2, mu> --> <t1' := t2,mu'>
+
+<t2, mu> --> <t2',mu'>
+------------------------------- E-Asgn2
+<v1 := t2, mu> --> <v1' := t2,mu'>
+
+l in domain(mu)
+------------------------------- E-AsnRed
+<l := v, mu> --> <(), mu[l -> v ]>
