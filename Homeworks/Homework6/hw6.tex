@@ -1,0 +1,197 @@
+\documentclass{article}
+\topmargin = -0.5in
+\oddsidemargin = 0in
+\evensidemargin = \oddsidemargin
+\textwidth = 6.5in
+\textheight = 9in
+\usepackage{times}
+\usepackage{bcprules}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{xcolor}
+
+\lstset{
+    language=caml,
+    columns=[c]fixed,
+% basicstyle=\small\ttfamily,
+    keywordstyle=\bfseries,
+    upquote=true,
+    commentstyle=,
+    breaklines=true,
+    showstringspaces=false,
+    stringstyle=\color{blue},
+    literate={'"'}{\textquotesingle "\textquotesingle}3
+}
+
+\newcommand{\mathType}[2]{\mathtt{#1}:\mathtt{#2}}
+
+\newcommand{\step}[2]{{\tt #1} $\longrightarrow$ {\tt #2}}
+
+\newcommand{\inferrule}[3]{\infrule[#1]{\mbox{#2}}{\mbox{#3}}}
+\newcommand{\inferax}[2]{\infrule[#1]{\mbox{}}{\mbox{#2}}}
+
+\newtheorem{example}{Example}
+
+\title{Homework 4}
+
+\author{Yan-Ru Jhou, Nurrachman Liu}
+
+\date{Mar 3rd, 2020}
+
+\begin{document}
+
+    \maketitle
+
+    \begin{description}
+        \item[1]{Sol}\\
+            \begin{enumerate}
+                \item[(a)]{Ans}\\
+                \begin{lstlisting}
+let r = ref 41 in
+let x = (r := !r+1)in
+    !r ;;
+                \end{lstlisting}
+                \item[(b)]{Ans} \\
+                \begin{lstlisting}
+let r = ref 41 in
+let x = ((function r:Ref Int -> (r := 41; 500)) (let _ = (r := !r+1) in ref !r)) in
+    !r
+                \end{lstlisting}
+                \item[(c)]{Ans} \\
+                \begin{lstlisting}
+let f=(let x = ref (-40) in
+        function () -> (x:=!x+41;!x)) in
+                (f ()) * (f ())
+                \end{lstlisting}
+            \end{enumerate}
+        \item [2]{Sol}
+            \begin{enumerate}
+                \item[(a)]{Small-Step} \\
+                    \inferax{E-While}{\step{while t${_1}$ do t${_2}$}{if t${_1}$ then t${_2}$;while t${_1}$ do t${_2}$ else ()}}
+                \item[(b)]{Typing Rule} \\
+                \inferrule{T-While}{$\Gamma \vdash t_1 : bool$ \andalso $\Gamma \vdash t_2:T$ }
+                {$\Gamma \vdash$ while t${_1}$ do t${_2}$: True}
+            \end{enumerate}
+        \item[3]{Sol}
+            \begin{enumerate}
+                \item [(a)]{WhileFun}\\
+                    $\text{letrec}\: whileFun = \\ \text{function }x:(Unit \rightarrow True) \longrightarrow \text{function }x:(Unit \rightarrow Unit) \longrightarrow while t{_1} \, t{_2}  \text{ in}\\ \, whileFun\, t_{1}\:\: t{_2}$
+            \end{enumerate}
+        \item[(4)]{Sol}
+            \begin{enumerate}
+                \item[(a)]{Small-Step}\\
+                    \inferrule{E-Node1}{\step{t${_1}$}{t$_1'$}}
+                    {\step{node(t$_1$,t${_2}$,t${_3}$) }{node(t${_1'}$,t${_2}$,t${_3}$)}}
+                    \inferrule{E-Node2}{\step{t${_2}$}{t$_2'$}}
+                    {\step{node(tv$_1$,t${_2}$,t${_3}$) }{node(tv${_1}$,t${_2'}$,t${_3}$)}}
+                    \inferrule{E-Node3}{\step{t${_3}$}{t$_3'$}}
+                    {\step{node(tv$_1$,v${_2}$,t${_3}$) }{node(tv${_1}$,v${_2}$,t${_3'}$)}}
+                    \inferrule{E-LeftTree}{\step{t$$}{t$'$}}
+                    {\step{leftTree t }{leftTree t${'}$}}
+                    \inferax{E-LeftTreeRed}{\step{leftTree Node(tv${_1}$,v${_2}$,tv${_3}$)}{tv${_1}$}}
+                    \inferrule{E-RightTree}{\step{t$$}{t$'$}}
+                    {\step{rightTree t }{rightTree t${'}$}}
+                    \inferax{E-RightTreeRed}{\step{rightTree Node(tv${_1}$,v${_2}$,tv${_3}$)}{tv${_3}$}}
+                    \inferrule{E-data1}{\step{t$$}{t$'$}}
+                    {\step{data t }{data t${'}$}}
+                    \inferax{E-dataRed}{\step{data node(tv${_1}$,v${_2}$,tv${_3}$)}{v${_2}$}}
+                \item[(b)]{Typing Rules}\\
+                    \inferax{T-leaf}{$\Gamma \vdash \text{leaf}:False \, \text{Tree}$}
+                    \inferrule{T-Node}{$\Gamma \vdash t_1: \text{T Tree}$ \andalso $\Gamma \vdash t_2: T$ \andalso $\Gamma \vdash t_3:\text{T Tree}$ }{$\Gamma \vdash\ node(t_1,t_2,t_3): \text{T Tree} $}
+                    \inferrule{T-leftTree}{$\Gamma \vdash t: \text{T Tree}$}{$\Gamma \vdash \text{leftTree}\, t: \text{T Tree}$}
+                    \inferrule{T-rightTree}{$\Gamma \vdash t: \text{T Tree}$}{$\Gamma \vdash \text{rightTree}\, t: \text{T Tree}$}
+                    \inferrule{T-Data}{ $\Gamma \vdash$ v${_2}$:T}{$\Gamma \vdash$ data node(tv${_1}$,v${_2}$,tv${_3}$): T}
+                \item[(c)]{Sol}\\
+                    The typechecker needs to guess types since we allow leaf to be have type false Tree.\\
+                    We could define the tree type as Tree = leaf \textbar node(t1,t2,t3).
+                    For example, in ocaml
+                    \begin{lstlisting}[language=Caml]
+type 'a tree =
+| Leaf
+| Node of 'a * 'a tree * 'a tree
+                    \end{lstlisting}
+                \item[(d)]{No}\\ It would violate Progress. \\ For example:
+                if $data$ leaf then $0$ else $1$
+            \end{enumerate}
+        \item[(5)]{Sol}
+            \begin{enumerate}
+                \item [(a)]{Inference Rules}
+                    \inferrule{I-Fun}
+                    {$\frac{  \cfrac{ \cfrac{\text{fresh } F}{ \text{fresh } X{_3},\text{ tinfer}(\{ f=X{_0}, x=X{_1} \},f) = \{ F, \{ F=X{_0} \} \}} ,\qquad  \frac{\text{fresh} X{_2},  \text{tinfer}(\{ f:X{_0}, x:X{_1}\}, f) = ( F, \{ F=X{_0}\}), \frac{\text{fresh} X }{\text{infer}(\{ f:X{_0}, x:X{_1}  \}, x) = ( X, \{X=X{_1})}  }{  \text{tinfer}(\{ F=X{_0}, X=X{_1}\}, \text{f x}) = (X{_2}, \{F=X{_0}, X=X{_1}, F = X \rightarrow X{_2}\}) } }{ \text{fresh } X{_1},X{_4}, \text{ tinfer}(\{f=X{_0}, x=X{_1}\}, f (f x) ) = (X{_3},\{ F=X{_0}, X=X{_1}, F= X\rightarrow X{_2}, F =  X{_2} \rightarrow X{_3}\} )}}{ \text{fresh } X{_0},X{_5}, \text{ tinfer}(\{f:X{_0}\}, \text{function x} \rightarrow f (f x)) =  (X{_4},  \{ F=X{_0}, X=X{_1}, F= X\rightarrow X{_2}, F =  X{_2} \rightarrow X{_3},  X{_4}= X{_1} \rightarrow X{_3}  \} )}$}
+                    {tinfer($\emptyset$, \text{function} f $\rightarrow$ \text{function} x $\rightarrow$ f(fx)) = ($X{_5}$, C )}
+                    $ C = \{ F=X{_0}, X=X{_1}, F= X\rightarrow X{_2}, F =  X{_2} \rightarrow X{_3},  X{_4}= X{_1} \rightarrow X{_3}, X{_5}= X{_0} \rightarrow X{_4} \}$ \\
+                \item[(b)]{Sol}\\
+                    $[ F \mapsto(X \rightarrow X), X{_0} \mapsto (X \rightarrow X), X{_1} \mapsto X, X{_2} \mapsto X, X{_3} \mapsto X, X{_4} \mapsto(X \rightarrow X), X{_5} \mapsto (X \rightarrow X) \rightarrow (X \rightarrow X)]$\\
+                    So, f could have the type $X \rightarrow X$, and the x could have the type $X$
+
+            \end{enumerate}
+        \item[(6)]{Sol} \\
+            \inferrule{I-left}{tinfer($\Gamma$,s) = (S${_1}$,C) \andalso fresh X \andalso fresh S${_r}$}
+            {tinfer($\Gamma$,left s) = (X, C $\cup \{ X=S{_1} \vee S{_r}  \}$)}
+            \inferrule{I-right}{tinfer($\Gamma$,s) = (S${_1}$, C) \andalso fresh X \andalso fresh S${_l}$}
+            {tinfer($\Gamma$,right s) = (X, C $\cup \{ X=S{_l} \vee S{_1} \}$)}
+            \inferrule{I-match}
+            {fresh X, X${_1}$, X${_2}$ \andalso tinfer($\Gamma$,s) = (S, C)  \andalso tinfer($\{ \Gamma, x{_1}:X{_1} \} , s_{_1}$) = $(S{_1}, C{_1})$ \andalso tinfer($\{\Gamma, x{_2}:X{_2}\},s_{2}$) = ($S{_2},C{_2}$)}
+            {tinfer($\Gamma$,match s with left x${_1}$ $\rightarrow$ s${_1}$ $|$ right x${_2}$ $\rightarrow$ s${_2}$)} = $(X, C \cup C{_1} \cup C{_2} \cup \{ S{_1} = S{_2}, S = X{_1} \vee X{_2} \} )$
+    \end{description}
+
+%    \section{Language of Booleans and Integers}
+%
+%    \subsection{Syntax}
+%
+%    \begin{tt}
+%        \begin{tabular}{rrl}
+%            t & ::= & b $\mid$ if t then t else t \\
+%            &$\mid$& n $\mid$ t + t $\mid$ t > t \\
+%            b & ::= & true $\mid$ false \\
+%            n & ::= & \mbox{\rm integer constant} \\
+%            v & ::= & b $\mid$ n \\
+%        \end{tabular}
+%    \end{tt}
+%
+%
+%    \subsection{Small-Step Operational Semantics}
+%
+%
+%    \inferax{E-IfTrue}{\step{if true then t$_2$ else t$_3$}{t$_2$}}
+%
+%    \inferax{E-IfFalse}{\step{if false then t$_2$ else t$_3$}{t$_3$}}
+%
+%    \inferrule{E-If}{\step{t$_1$}{t$_1'$}}
+%    {\step{if t$_1$ then t$_2$ else t$_3$}{if t$_1'$ then t$_2$ else t$_3$}}
+%
+%
+%    \inferrule{E-Plus1}{\step{t$_1$}{t$_1'$}}
+%    {\step{t$_1$ + t$_2$}{t$_1'$ + t$_2$}}
+%
+%
+%    \inferrule{E-Plus2}{\step{t$_2$}{t$_2'$}}
+%    {\step{v$_1$ + t$_2$}{v$_1$ + t$_2'$}}
+%
+%
+%    \inferrule{E-PlusRed}{n = n$_1$ $[\![+]\!]$ n$_2$}
+    %%    {\step{n$_1$ + n$_2$}{n}}
+%
+%    \inferrule{E-GT1}{\step{t$_1$}{t$_1'$}}
+%    {\step{t$_1$ > t$_2$}{t$_1'$ > t$_2$}}
+%
+%
+%    \inferrule{E-GT2}{\step{t$_2$}{t$_2'$}}
+%    {\step{v$_1$ > t$_2$}{v$_1$ > t$_2'$}}
+%
+%
+%    \inferrule{E-GTRed}{b = n$_1$ $[\![>]\!]$ n$_2$}
+%    {\step{n$_1$ > n$_2$}{b}}
+
+
+\end{document}
+
+
+%F = X0,X = X1,F = X → X2,F = X2 → X4,X5 = X0 → X4,X6 = X0 → X5
+%
+%(F=X0, X = X1; F= X -> X2; F = X2 -> X4 ; X5 = X0 -> X4; X6 = X0 -> X5  )

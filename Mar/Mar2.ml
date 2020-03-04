@@ -18,4 +18,4 @@ let fact = ref (function x -> x + 1) in
 
 let fact = ref (function x -> x + 1) in
     let _ = fact := (function x -> if x = 0 then 1 else x * !fact(x-1)) in
-        !fact 5;;
+        !fact ;;
