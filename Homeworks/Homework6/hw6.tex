@@ -71,11 +71,14 @@ let f=(let x = ref (-40) in
             \end{enumerate}
         \item [2]{Sol}
             \begin{enumerate}
-                \item[(a)]{Small-Step} \\
-                    \inferax{E-While}{\step{while t${_1}$ do t${_2}$}{if t${_1}$ then t${_2}$;while t${_1}$ do t${_2}$ else ()}}
-                \item[(b)]{Typing Rule} \\
-                \inferrule{T-While}{$\Gamma \vdash t_1 : bool$ \andalso $\Gamma \vdash t_2:T$ }
-                {$\Gamma \vdash$ while t${_1}$ do t${_2}$: True}
+                \item[(a)]{No}\\
+                $\text{let } a = \text{ref } 10 \text{ in} (free\, a;!a)$ \\ This would typecheck to $Int$ but it would eventually stuck
+                \item[(b)]{Yes}\\
+                \item[(c)]{No} Consider the following example\\
+                $\Sigma=\{(l,Int)\}$,\;  $\mu=\{(l,12)\}$\;
+                $t=(free\; l;!l)$ then it would step to\\
+                $t'=(!l)$, where $u'=\{\},\Sigma'=\{\}$.
+                However, it would not typecheck
             \end{enumerate}
         \item[3]{Sol}
             \begin{enumerate}
