@@ -101,3 +101,38 @@ mu(l) = v
 l in domain(mu)
 ------------------------------- E-AsnRed
 <l := v, mu> --> <(), mu[l -> v ]>
+
+
+Type Soundness:
+
+If {};{} |- t:T and <t,{}> --> * <t',mu'> then either t' is a value or exists t'' and mu''
+ s.t. <t'',mu''>
+
+Progress:Forall mu, If {};Sigma |- t:T and Sigma  |= mu, then either t is a value or exists t' and mu' s.t. <t,mu> --> <t',mu'>.
+
+CounterExample: {};{(l,Int)} |- !l: Int
+
+Preservation: If {};Sigma |- t:T and Sigma and <t,mu> --> <t',mu'> then there exists Sigma' s.t. {};Sigma' |- t':T
+and Sigma' |= mu'.
+Example:
+<!(ref 0),{}> --> <!l, {(l,0)}> ---> <0,{(l,0)}>
+
+Problem: need a rule for typechecking location:
+
+Solution: Typing judgement is going to also rely on  a *store typing* Sigma, which is
+a map from locations to the type of their contents.
+
+Sigma(l) : T
+------------------
+G;Sigma |- l: Ref T
+
+Second Problem: Need a relationship between Sigma and mu.
+
+We will say that Sigma and mu are consistent with one another, denoted  Sigma  |= mu , if:
+    1. domain(Sigma) = domain(mu)
+    2. forall l in domain(Sigma), {};Sigma |- mu(l) : Sigma(l)
+
+Example:
+    {(l,Int)} is not consistent with {}
+    {(l,Int)} is not consistent with {(l,false)}
+    {(l,Int)} is not consistent with {(l,43)}

@@ -1,0 +1,66 @@
+Subtyping (Chapter 15)
+
+What do we need for subtyping?
+
+Introduce a subtyping judgement of the form T <: T'
+
+Add one new typing rule that encodes the principle of subtype
+substituability: If T <: T' then values of type T can be used wherever values of  type  T' are  expected
+
+G;Sigma  |- t:T
+T <: T'
+--------------------T-Sub
+G;Sigma  | t: T'
+
+
+Introduce a type Top, which is a supertype of all types.
+
+----------------------S-Top
+T <: Top
+
+---------------------S-Refl
+T <: T
+
+T <: T'
+T' <: T''
+--------------------S-Trans
+T <: T'
+
+
+n >= m
+-------------------------------------S-Width
+(T1*............*Tn) <: (T1 *..........Tm)
+
+
+S1 <: T1
+....
+Sn <: Tn
+-------------------------------------S-Depth
+(S1*............*Sn) <: (T1 *..........Tn)
+
+T1 <: S1
+S2 <: T2
+-------------------------------------S-Fun
+S1 -> S2 < : T1 -> T2
+
+
+S <: T
+---------------------------S-Ref
+Ref S <: Ref T
+
+Problem:
+let  r  : Ref Int  = ref  0 in
+    let s : Ref Top  = r  in
+        s :=  false;
+        !r + 1
+
+T <: S
+---------------------------S-Ref
+Ref S <: Ref T
+
+That  doesn't work either
+
+S <: T
+T <: S
+-------------------S-Ref
+Ref S <: Ref T

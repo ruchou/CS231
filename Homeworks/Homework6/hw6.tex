@@ -37,7 +37,7 @@
 
 \newtheorem{example}{Example}
 
-\title{Homework 4}
+\title{Homework 6}
 
 \author{Yan-Ru Jhou, Nurrachman Liu}
 
@@ -79,65 +79,18 @@ let f=(let x = ref (-40) in
             \end{enumerate}
         \item[3]{Sol}
             \begin{enumerate}
-                \item [(a)]{WhileFun}\\
-                    $\text{letrec}\: whileFun = \\ \text{function }x:(Unit \rightarrow True) \longrightarrow \text{function }x:(Unit \rightarrow Unit) \longrightarrow while t{_1} \, t{_2}  \text{ in}\\ \, whileFun\, t_{1}\:\: t{_2}$
+                \item [(a)]{Yes}
+                \item[(b)]{No}\\
+                $\ (function \text{ x}: \text{Ref }Top \rightarrow !x)(y:Top)$
+                \item[(c)] {No}\\
+                $\text{let } x: \text{Ref Top} = \text{Ref } 1 \, in $\\
+                $\text{let } y: \text{Ref (Top,Top)} = x\, in$\\
+                $!y$
+                \item[(d)] {No}\\
+                $\text{let } x: \text{Ref (Top,Top)} = \text{Ref } (1,2) \, in $\\
+                $\text{let } y: \text{Ref Top} = x \,in$\\
+                $y:=false$
             \end{enumerate}
-        \item[(4)]{Sol}
-            \begin{enumerate}
-                \item[(a)]{Small-Step}\\
-                    \inferrule{E-Node1}{\step{t${_1}$}{t$_1'$}}
-                    {\step{node(t$_1$,t${_2}$,t${_3}$) }{node(t${_1'}$,t${_2}$,t${_3}$)}}
-                    \inferrule{E-Node2}{\step{t${_2}$}{t$_2'$}}
-                    {\step{node(tv$_1$,t${_2}$,t${_3}$) }{node(tv${_1}$,t${_2'}$,t${_3}$)}}
-                    \inferrule{E-Node3}{\step{t${_3}$}{t$_3'$}}
-                    {\step{node(tv$_1$,v${_2}$,t${_3}$) }{node(tv${_1}$,v${_2}$,t${_3'}$)}}
-                    \inferrule{E-LeftTree}{\step{t$$}{t$'$}}
-                    {\step{leftTree t }{leftTree t${'}$}}
-                    \inferax{E-LeftTreeRed}{\step{leftTree Node(tv${_1}$,v${_2}$,tv${_3}$)}{tv${_1}$}}
-                    \inferrule{E-RightTree}{\step{t$$}{t$'$}}
-                    {\step{rightTree t }{rightTree t${'}$}}
-                    \inferax{E-RightTreeRed}{\step{rightTree Node(tv${_1}$,v${_2}$,tv${_3}$)}{tv${_3}$}}
-                    \inferrule{E-data1}{\step{t$$}{t$'$}}
-                    {\step{data t }{data t${'}$}}
-                    \inferax{E-dataRed}{\step{data node(tv${_1}$,v${_2}$,tv${_3}$)}{v${_2}$}}
-                \item[(b)]{Typing Rules}\\
-                    \inferax{T-leaf}{$\Gamma \vdash \text{leaf}:False \, \text{Tree}$}
-                    \inferrule{T-Node}{$\Gamma \vdash t_1: \text{T Tree}$ \andalso $\Gamma \vdash t_2: T$ \andalso $\Gamma \vdash t_3:\text{T Tree}$ }{$\Gamma \vdash\ node(t_1,t_2,t_3): \text{T Tree} $}
-                    \inferrule{T-leftTree}{$\Gamma \vdash t: \text{T Tree}$}{$\Gamma \vdash \text{leftTree}\, t: \text{T Tree}$}
-                    \inferrule{T-rightTree}{$\Gamma \vdash t: \text{T Tree}$}{$\Gamma \vdash \text{rightTree}\, t: \text{T Tree}$}
-                    \inferrule{T-Data}{ $\Gamma \vdash$ v${_2}$:T}{$\Gamma \vdash$ data node(tv${_1}$,v${_2}$,tv${_3}$): T}
-                \item[(c)]{Sol}\\
-                    The typechecker needs to guess types since we allow leaf to be have type false Tree.\\
-                    We could define the tree type as Tree = leaf \textbar node(t1,t2,t3).
-                    For example, in ocaml
-                    \begin{lstlisting}[language=Caml]
-type 'a tree =
-| Leaf
-| Node of 'a * 'a tree * 'a tree
-                    \end{lstlisting}
-                \item[(d)]{No}\\ It would violate Progress. \\ For example:
-                if $data$ leaf then $0$ else $1$
-            \end{enumerate}
-        \item[(5)]{Sol}
-            \begin{enumerate}
-                \item [(a)]{Inference Rules}
-                    \inferrule{I-Fun}
-                    {$\frac{  \cfrac{ \cfrac{\text{fresh } F}{ \text{fresh } X{_3},\text{ tinfer}(\{ f=X{_0}, x=X{_1} \},f) = \{ F, \{ F=X{_0} \} \}} ,\qquad  \frac{\text{fresh} X{_2},  \text{tinfer}(\{ f:X{_0}, x:X{_1}\}, f) = ( F, \{ F=X{_0}\}), \frac{\text{fresh} X }{\text{infer}(\{ f:X{_0}, x:X{_1}  \}, x) = ( X, \{X=X{_1})}  }{  \text{tinfer}(\{ F=X{_0}, X=X{_1}\}, \text{f x}) = (X{_2}, \{F=X{_0}, X=X{_1}, F = X \rightarrow X{_2}\}) } }{ \text{fresh } X{_1},X{_4}, \text{ tinfer}(\{f=X{_0}, x=X{_1}\}, f (f x) ) = (X{_3},\{ F=X{_0}, X=X{_1}, F= X\rightarrow X{_2}, F =  X{_2} \rightarrow X{_3}\} )}}{ \text{fresh } X{_0},X{_5}, \text{ tinfer}(\{f:X{_0}\}, \text{function x} \rightarrow f (f x)) =  (X{_4},  \{ F=X{_0}, X=X{_1}, F= X\rightarrow X{_2}, F =  X{_2} \rightarrow X{_3},  X{_4}= X{_1} \rightarrow X{_3}  \} )}$}
-                    {tinfer($\emptyset$, \text{function} f $\rightarrow$ \text{function} x $\rightarrow$ f(fx)) = ($X{_5}$, C )}
-                    $ C = \{ F=X{_0}, X=X{_1}, F= X\rightarrow X{_2}, F =  X{_2} \rightarrow X{_3},  X{_4}= X{_1} \rightarrow X{_3}, X{_5}= X{_0} \rightarrow X{_4} \}$ \\
-                \item[(b)]{Sol}\\
-                    $[ F \mapsto(X \rightarrow X), X{_0} \mapsto (X \rightarrow X), X{_1} \mapsto X, X{_2} \mapsto X, X{_3} \mapsto X, X{_4} \mapsto(X \rightarrow X), X{_5} \mapsto (X \rightarrow X) \rightarrow (X \rightarrow X)]$\\
-                    So, f could have the type $X \rightarrow X$, and the x could have the type $X$
-
-            \end{enumerate}
-        \item[(6)]{Sol} \\
-            \inferrule{I-left}{tinfer($\Gamma$,s) = (S${_1}$,C) \andalso fresh X \andalso fresh S${_r}$}
-            {tinfer($\Gamma$,left s) = (X, C $\cup \{ X=S{_1} \vee S{_r}  \}$)}
-            \inferrule{I-right}{tinfer($\Gamma$,s) = (S${_1}$, C) \andalso fresh X \andalso fresh S${_l}$}
-            {tinfer($\Gamma$,right s) = (X, C $\cup \{ X=S{_l} \vee S{_1} \}$)}
-            \inferrule{I-match}
-            {fresh X, X${_1}$, X${_2}$ \andalso tinfer($\Gamma$,s) = (S, C)  \andalso tinfer($\{ \Gamma, x{_1}:X{_1} \} , s_{_1}$) = $(S{_1}, C{_1})$ \andalso tinfer($\{\Gamma, x{_2}:X{_2}\},s_{2}$) = ($S{_2},C{_2}$)}
-            {tinfer($\Gamma$,match s with left x${_1}$ $\rightarrow$ s${_1}$ $|$ right x${_2}$ $\rightarrow$ s${_2}$)} = $(X, C \cup C{_1} \cup C{_2} \cup \{ S{_1} = S{_2}, S = X{_1} \vee X{_2} \} )$
     \end{description}
 
 %    \section{Language of Booleans and Integers}

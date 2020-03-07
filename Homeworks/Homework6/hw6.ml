@@ -17,3 +17,17 @@ let f = let x = ref (-40) in
             (x:=!x+41;!x)
  in (f ()) * (f ());;
 
+
+(*Q2*)
+let x = ref 5 in
+    x:=10 ;!x
+    ;;
+
+(*Q3*)
+
+
+
+
+let x = ref (1,2) in
+    x := (3,4); !x;;
+
