@@ -72,7 +72,7 @@ let f=(let x = ref (-40) in
         \item [2]{Sol}
             \begin{enumerate}
                 \item[(a)]{No}\\
-                $\text{let } a = \text{ref } 10 \text{ in} (free\, a;!a)$ \\ This would typecheck to $Int$ but it would eventually stuck
+                $t = \text{let } a = \text{ref } 10 \text{ in} (free\, a;!a)$ \\ This would typecheck to $Int$ but it would eventually stuck
                 \item[(b)]{Yes}\\
                 \item[(c)]{No} Consider the following example\\
                 $\Sigma=\{(l,Int)\}$,\;  $\mu=\{(l,12)\}$\;
@@ -84,7 +84,7 @@ let f=(let x = ref (-40) in
             \begin{enumerate}
                 \item [(a)]{Yes}
                 \item[(b)]{No}\\
-                $\ (function \text{ x}: \text{Ref }Top \rightarrow !x)(y:Top)$
+                $\text{let f:(Ref Top} \rightarrow \text{Top)} = \ (function \text{ x}: \text{Ref }Top \rightarrow !x) \,in \text{ (f true)}$
                 \item[(c)] {No}\\
                 $\text{let } x: \text{Ref Top} = \text{Ref } 1 \, in $\\
                 $\text{let } y: \text{Ref (Top,Top)} = x\, in$\\

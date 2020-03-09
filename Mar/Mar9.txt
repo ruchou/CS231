@@ -1,0 +1,17 @@
+
+
+
+S1 <: T1
+S2 <: T2
+------------------
+S1 -> S2 <: T1 -> T2
+
+assume g <: t
+
+let f = function x:Int -> x+1 in
+    f true
+
+
+let f :Int -> Int = function x:Int -> x+1 in
+let g :Top -> Int = f in
+    g true
